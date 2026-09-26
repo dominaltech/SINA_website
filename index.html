@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Dashboard - SINA Admin Portal</title>
+  <meta name="description" content="SINA Operations & Field Representative Management Portal">
+  <meta name="theme-color" content="#1E513A">
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <meta http-equiv="Pragma" content="no-cache">
+  <meta http-equiv="Expires" content="0">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="SINA Admin">
+  <link rel="icon" type="image/x-icon" href="favicon.ico">
+  <link rel="icon" type="image/png" sizes="192x192" href="assets/icon-192.png">
+  <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
+  <link rel="manifest" href="manifest.json">
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/admin.css">
+  <script src="js/config.js"></script>
+  <script src="js/auth.js"></script>
+  <script>
+    if (window.sinaAdminAuth) {
+      window.sinaAdminAuth.requireAdmin();
+    }
+  </script>
+</head>
+<body>
+  <!-- Top Persistent Header Taskbar -->
+  <header id="sina-admin-header" class="admin-top-bar"></header>
+
+
+  <main class="admin-container">
+    <!-- Top Header Title Row -->
+    <div class="page-header-row">
+      <div>
+        <h1 class="page-title">Operations Dashboard</h1>
+        <p class="page-subtitle" id="dashboard-view-scope">Showing consolidated operations for all active field representatives</p>
+      </div>
+      <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+        <button type="button" id="btn-trigger-reset" class="btn btn-outline-purple btn-sm" style="color: var(--danger-color); border-color: rgba(220,38,38,0.4);" title="Reset all transactions and start fresh">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="1 4 1 10 7 10"/><polyline points="23 20 23 14 17 14"/><path d="M20.49 9A9 9 0 0 0 5.64 5.64L1 10m22 4l-4.64 4.36A9 9 0 0 1 3.51 15"/></svg>
+          Reset All Data
+        </button>
+        <a href="godowns.html" class="btn btn-outline-purple btn-sm">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg>
+          Godowns & Storage
+        </a>
+        <a href="representatives.html" class="btn btn-primary btn-sm">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
+          Manage Reps & Passwords
+        </a>
+      </div>
+    </div>
+
+    <!-- Dual-View Filter Bar (All Reps vs Particular Rep) -->
+    <div class="rep-filter-bar">
+      <div class="filter-left-col">
+        <label class="filter-label" for="dashboard-rep-filter">Filter Operations By:</label>
+        <select id="dashboard-rep-filter" class="rep-filter-select">
+          <option value="">Loading representatives...</option>
+        </select>
+      </div>
+      <div style="align-self: flex-end;">
+        <span class="status-badge active">Real-Time Sync Active</span>
+      </div>
+    </div>
+
+    <!-- 5 Live KPI Metric Cards -->
+    <div class="admin-kpi-grid">
+      <div class="admin-kpi-card">
+        <div class="kpi-label">Total Cash Given</div>
+        <div class="kpi-number text-purple" id="kpi-cash-overall-val">â‚¹0</div>
+        <div class="kpi-sub">All-time cash given</div>
+      </div>
+      <div class="admin-kpi-card">
+        <div class="kpi-label">Cash Given Today</div>
+        <div class="kpi-number" id="kpi-cash-today-val">â‚¹0</div>
+        <div class="kpi-sub">Today's cash given</div>
+      </div>
+      <div class="admin-kpi-card">
+        <div class="kpi-label">Total Goods Bought</div>
+        <div class="kpi-number text-purple" id="kpi-procurement-val">â‚¹0</div>
+        <div class="kpi-sub">Total purchases today</div>
+      </div>
+      <div class="admin-kpi-card kpi-danger">
+        <div class="kpi-label">Daily Expenses</div>
+        <div class="kpi-number" style="color: var(--danger-color);" id="kpi-expenses-val">- â‚¹0</div>
+        <div class="kpi-sub">Travel, fuel & food</div>
+      </div>
+      <div class="admin-kpi-card kpi-warning">
+        <div class="kpi-label">Cash in Hand with Reps</div>
+        <div class="kpi-number" style="color: var(--purple-dark);" id="kpi-net-cash-val">â‚¹0</div>
+        <div class="kpi-sub">Cash Given - Purchases - Expenses</div>
+      </div>
+    </div>
+
+    <!-- Live Cash Balance Summary Card -->
+    <div class="reconciliation-card" id="recon-summary-card">
+      <div class="text-center text-muted">Calculating live cash balance...</div>
+    </div>
+
+    <!-- Quick Access Hub -->
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 12px; margin-top: 16px;">
+      <a href="godowns.html" class="admin-kpi-card" style="text-decoration: none; display: flex; align-items: center; gap: 12px; padding: 14px 16px; cursor: pointer;">
+        <div style="width: 40px; height: 40px; border-radius: 10px; background: rgba(139,92,246,0.12); display: flex; align-items: center; justify-content: center; color: var(--purple-primary); flex-shrink: 0;">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg>
+        </div>
+        <div>
+          <div style="font-weight: 700; font-size: 0.92rem; color: var(--text-primary);">Godowns & Storage</div>
+          <div style="font-size: 0.74rem; color: var(--text-muted);">Stock breakdown & depots</div>
+        </div>
+      </a>
+      <a href="firms.html" class="admin-kpi-card" style="text-decoration: none; display: flex; align-items: center; gap: 12px; padding: 14px 16px; cursor: pointer;">
+        <div style="width: 40px; height: 40px; border-radius: 10px; background: rgba(139,92,246,0.12); display: flex; align-items: center; justify-content: center; color: var(--purple-primary); flex-shrink: 0;">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+        </div>
+        <div>
+          <div style="font-weight: 700; font-size: 0.92rem; color: var(--text-primary);">Firms Directory</div>
+          <div style="font-size: 0.74rem; color: var(--text-muted);">Vendor shops & routes</div>
+        </div>
+      </a>
+      <a href="catalog.html" class="admin-kpi-card" style="text-decoration: none; display: flex; align-items: center; gap: 12px; padding: 14px 16px; cursor: pointer;">
+        <div style="width: 40px; height: 40px; border-radius: 10px; background: rgba(139,92,246,0.12); display: flex; align-items: center; justify-content: center; color: var(--purple-primary); flex-shrink: 0;">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
+        </div>
+        <div>
+          <div style="font-weight: 700; font-size: 0.92rem; color: var(--text-primary);">Product Master</div>
+          <div style="font-size: 0.74rem; color: var(--text-muted);">Commodities & items</div>
+        </div>
+      </a>
+      <a href="approvals.html" class="admin-kpi-card" style="text-decoration: none; display: flex; align-items: center; gap: 12px; padding: 14px 16px; cursor: pointer;">
+        <div style="width: 40px; height: 40px; border-radius: 10px; background: rgba(139,92,246,0.12); display: flex; align-items: center; justify-content: center; color: var(--purple-primary); flex-shrink: 0;">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+        </div>
+        <div>
+          <div style="font-weight: 700; font-size: 0.92rem; color: var(--text-primary);">Approvals & UTR</div>
+          <div style="font-size: 0.74rem; color: var(--text-muted);">Payment verifications</div>
+        </div>
+      </a>
+    </div>
+
+    <!-- Recent Field Activities Table -->
+    <div style="margin-top: 24px; width: 100%; max-width: 100%; min-width: 0;">
+      <div class="page-header-row" style="margin-bottom: 8px;">
+        <div>
+          <h3 style="font-size: 1.15rem; font-weight: 700;">Live Field Activity Feed</h3>
+          <div style="font-size: 0.72rem; color: var(--text-muted); display: flex; align-items: center; gap: 4px; margin-top: 2px;">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+            Swipe horizontally to view all table columns
+          </div>
+        </div>
+        <a href="approvals.html" class="text-purple font-bold" style="font-size: 0.85rem;">Review Approvals &rarr;</a>
+      </div>
+      <div class="table-responsive">
+        <table class="admin-table">
+          <thead>
+            <tr>
+              <th>Time</th>
+              <th>Representative</th>
+              <th>Firm / Shop</th>
+              <th>Product / Details</th>
+              <th>Amount</th>
+              <th>Mode</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody id="recent-activity-tbody">
+            <tr>
+              <td colspan="7" class="text-center text-muted" style="padding: 24px;">Loading activities...</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </main>
+
+  <!-- RESET CONFIRMATION MODAL -->
+  <div id="reset-confirm-modal" class="sina-modal-backdrop">
+    <div class="sina-modal-card" style="max-width: 440px;">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px;">
+        <span class="status-badge inactive" style="font-size: 0.8rem;">System Reset</span>
+        <button class="icon-btn" id="btn-close-reset-modal">&times;</button>
+      </div>
+      <h3 style="font-size: 1.2rem; font-weight: 800; color: var(--danger-color); margin-bottom: 8px;">Reset All Operations Data?</h3>
+      <p class="text-muted" style="font-size: 0.85rem; line-height: 1.5; margin-bottom: 20px;">
+        This action will wipe all purchase orders, reset field expenses to â‚¹0, restore fresh morning cash given, and reset all representative passwords to default (<code>rep123</code>).<br><br>
+        <strong>The app will be reset fresh like starting brand new.</strong>
+      </p>
+      <div style="display: flex; gap: 10px;">
+        <button type="button" class="btn btn-secondary" style="flex: 1;" id="btn-cancel-reset">Cancel</button>
+        <button type="button" class="btn btn-logout" style="flex: 1;" id="btn-confirm-reset">Yes, Reset All</button>
+      </div>
+    </div>
+  </div>
+
+    <!-- Fixed Bottom Taskbar (5 Primary Tabs) -->
+  <nav id="admin-bottom-nav" class="admin-bottom-nav">
+    <a href="index.html" class="admin-nav-item" id="admin-nav-home">
+      <span class="nav-icon-wrap">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+      </span>
+      <span class="nav-text-label">Dashboard</span>
+    </a>
+    <a href="approvals.html" class="admin-nav-item" id="admin-nav-approvals">
+      <span class="nav-icon-wrap">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+        <span id="admin-approvals-badge" class="admin-nav-badge"></span>
+      </span>
+      <span class="nav-text-label">Approvals</span>
+    </a>
+    <a href="representatives.html" class="admin-nav-item" id="admin-nav-reps">
+      <span class="nav-icon-wrap">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+      </span>
+      <span class="nav-text-label">Reps</span>
+    </a>
+    <a href="firms.html" class="admin-nav-item" id="admin-nav-firms">
+      <span class="nav-icon-wrap">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+      </span>
+      <span class="nav-text-label">Firms</span>
+    </a>
+    <a href="history.html" class="admin-nav-item" id="admin-nav-history">
+      <span class="nav-icon-wrap">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+      </span>
+      <span class="nav-text-label">History</span>
+    </a>
+  </nav>
+
+  <!-- Admin Slide-Out Drawer Navigation (All 8 Modules) -->
+  <div id="sina-admin-drawer" class="sina-drawer">
+    <div class="drawer-backdrop" id="admin-drawer-backdrop"></div>
+    <div class="drawer-panel">
+      <div class="drawer-header admin-grad-header">
+        <div class="rep-avatar-box">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        </div>
+        <div class="rep-info">
+          <h4 class="rep-name" id="drawer-admin-name">Operations Admin</h4>
+          <span class="rep-phone" id="drawer-admin-email">admin@sina.com</span>
+          <span class="rep-route-pill">Super Admin</span>
+        </div>
+        <button class="icon-btn close-drawer-btn" id="close-admin-drawer-btn" type="button">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+      </div>
+
+      <nav class="drawer-nav">
+        <a href="index.html" class="drawer-link" id="drawer-link-home">
+          <span class="nav-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></span>
+          <span class="nav-label">Operations Dashboard</span>
+        </a>
+        <a href="representatives.html" class="drawer-link" id="drawer-link-reps">
+          <span class="nav-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></span>
+          <span class="nav-label">Representatives & Passwords</span>
+        </a>
+        <a href="history.html" class="drawer-link" id="drawer-link-history">
+          <span class="nav-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></span>
+          <span class="nav-label">Purchase History</span>
+        </a>
+            <a href="receipts.html" class="drawer-link" id="drawer-link-receipts">
+              <span class="nav-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg></span>
+              <span class="nav-label">Receipts & Vouchers</span>
+            </a>
+            <a href="bank-accounts.html" class="drawer-link" id="drawer-link-banks">
+              <span class="nav-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 2 7 22 7 12 2"/><rect x="4" y="10" width="2" height="9"/><rect x="9" y="10" width="2" height="9"/><rect x="14" y="10" width="2" height="9"/><rect x="19" y="10" width="2" height="9"/><line x1="2" y1="19" x2="22" y2="19"/></svg></span>
+              <span class="nav-label">Company Bank Accounts</span>
+            </a>
+            <a href="purchasing-firms.html" class="drawer-link" id="drawer-link-purchasing-firms">
+              <span class="nav-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg></span>
+              <span class="nav-label">Our Purchasing Firms</span>
+            </a>
+            <a href="sources.html" class="drawer-link" id="drawer-link-sources">
+              <span class="nav-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg></span>
+              <span class="nav-label">Procurement Sources</span>
+            </a>
+        <a href="catalog.html" class="drawer-link" id="drawer-link-catalog">
+          <span class="nav-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg></span>
+          <span class="nav-label">Commodities & Product Master</span>
+        </a>
+        <a href="firms.html" class="drawer-link" id="drawer-link-firms">
+          <span class="nav-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg></span>
+          <span class="nav-label">Firms Directory</span>
+        </a>
+        <a href="godowns.html" class="drawer-link" id="drawer-link-godowns">
+          <span class="nav-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg></span>
+          <span class="nav-label">Godowns & Warehouses</span>
+        </a>
+        <a href="approvals.html" class="drawer-link" id="drawer-link-approvals">
+          <span class="nav-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg></span>
+          <span class="nav-label">Payment Approvals</span>
+        </a>
+        <a href="analytics.html" class="drawer-link" id="drawer-link-analytics">
+          <span class="nav-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg></span>
+          <span class="nav-label">Operational Analytics</span>
+        </a>
+        <a href="locations.html" class="drawer-link" id="drawer-link-locations">
+          <span class="nav-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg></span>
+          <span class="nav-label">Field Rep GPS Tracking</span>
+        </a>
+      </nav>
+
+      <div class="drawer-footer">
+        <button type="button" class="btn btn-outline-green btn-block" style="margin-bottom: 8px;" onclick="window.openSettingsModal()">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+          App Policies & Settings
+        </button>
+        <button type="button" class="btn btn-outline-green btn-block" style="color: var(--danger-color); border-color: rgba(220,38,38,0.4); margin-bottom: 8px;" onclick="window.triggerSystemReset()">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg>
+          Reset All Data
+        </button>
+        <button type="button" class="btn btn-logout btn-block" onclick="window.sinaAdminAuth ? window.sinaAdminAuth.logout() : (window.location.href='login.html')">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+          Sign Out
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Settings & Permissions Modal -->
+  <div id="admin-settings-modal" class="sina-modal-backdrop">
+    <div class="sina-modal-card" style="max-width: 480px; padding: 20px;">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px;">
+        <div style="display: flex; align-items: center; gap: 8px;">
+          <img src="assets/logo.png" alt="SINA" style="width: 28px; height: 28px; object-fit: contain;">
+          <h3 style="font-size: 1.15rem; font-weight: 800; color: var(--green-dark); margin: 0;">App Policies & Permissions</h3>
+        </div>
+        <button type="button" class="icon-btn" onclick="window.closeSettingsModal()">&times;</button>
+      </div>
+      
+      <div style="background: var(--bg-secondary); border-radius: var(--radius-sm); padding: 14px; margin-bottom: 12px; border: 1px solid var(--border-color);">
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+          <div>
+            <strong style="font-size: 0.95rem; color: var(--text-primary);">Mandatory Expense Receipt Photo</strong>
+            <p class="text-muted" style="font-size: 0.78rem; margin: 4px 0 0 0;">Require field reps to upload a bill/receipt photo before an expense can be saved.</p>
+          </div>
+          <label style="position: relative; display: inline-block; width: 44px; height: 24px; margin-left: 12px;">
+            <input type="checkbox" id="setting-require-receipt-chk" style="opacity: 0; width: 0; height: 0;">
+            <span id="slider-require-receipt" style="position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #CBD5E1; transition: .3s; border-radius: 24px;"></span>
+          </label>
+        </div>
+      </div>
+
+      <div style="background: var(--bg-secondary); border-radius: var(--radius-sm); padding: 14px; margin-bottom: 16px; border: 1px solid var(--border-color);">
+        <strong style="font-size: 0.88rem; display: block; margin-bottom: 10px;">Android System Permissions</strong>
+        <div style="display: flex; flex-direction: column; gap: 8px; margin-bottom: 12px;">
+          <div style="display: flex; justify-content: space-between; align-items: center;">
+            <div>
+              <span style="font-size: 0.82rem; font-weight: 600; color: var(--text-primary); display: block;">High Priority Alerts</span>
+              <span style="font-size: 0.72rem; color: var(--text-muted);">Real-time purchase & payment sound/vibration</span>
+            </div>
+            <span class="badge" style="background: var(--green-tint); color: var(--green-dark); border: 1px solid var(--green-border); font-weight: 700;">Granted</span>
+          </div>
+          <div style="display: flex; justify-content: space-between; align-items: center;">
+            <div>
+              <span style="font-size: 0.82rem; font-weight: 600; color: var(--text-primary); display: block;">Location / GPS</span>
+              <span style="font-size: 0.72rem; color: var(--text-muted);">View field representative live coordinates</span>
+            </div>
+            <span class="badge" style="background: var(--green-tint); color: var(--green-dark); border: 1px solid var(--green-border); font-weight: 700;">Granted</span>
+          </div>
+          <div style="display: flex; justify-content: space-between; align-items: center;">
+            <div>
+              <span style="font-size: 0.82rem; font-weight: 600; color: var(--text-primary); display: block;">Camera & Storage</span>
+              <span style="font-size: 0.72rem; color: var(--text-muted);">Receipt & passbook review attachments</span>
+            </div>
+            <span class="badge" style="background: var(--green-tint); color: var(--green-dark); border: 1px solid var(--green-border); font-weight: 700;">Granted</span>
+          </div>
+        </div>
+        <button type="button" class="btn btn-outline-green btn-sm btn-block" onclick="if(window.FlutterBridge){window.FlutterBridge.postMessage(JSON.stringify({action:'OPEN_APP_SETTINGS'}))}else{alert('Available on Android')}" style="font-size: 0.8rem; font-weight: 700;">
+          Open Android App Settings
+        </button>
+      </div>
+
+      <div style="display: flex; justify-content: flex-end; gap: 8px;">
+        <button type="button" class="btn btn-secondary btn-sm" onclick="window.closeSettingsModal()">Cancel</button>
+        <button type="button" class="btn btn-primary btn-sm" onclick="window.saveSettings()">Save Configuration</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notification Container -->
+  <div id="admin-toast-container" class="admin-toast-container"></div>
+
+<!-- Scripts -->
+  <script src="js/config.js"></script>
+  <script src="js/icons.js"></script>
+  <script src="js/db.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/translate.js"></script>
+  <script src="js/nav.js"></script>
+  <script src="js/dashboard.js"></script>
+</body>
+</html>

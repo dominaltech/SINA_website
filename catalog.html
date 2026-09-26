@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Commodities & Product Master - SINA Admin</title>
+  <meta name="theme-color" content="#1B5E20">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="SINA Admin">
+  <link rel="icon" type="image/x-icon" href="favicon.ico">
+  <link rel="icon" type="image/png" sizes="192x192" href="assets/icon-192.png">
+  <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
+  <link rel="manifest" href="manifest.json">
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/admin.css">
+</head>
+<body>
+  <!-- Top Persistent Header Taskbar -->
+  <header id="sina-admin-header" class="admin-top-bar">
+    <div class="top-bar-left">
+      <button id="admin-drawer-toggle-btn" class="icon-btn" aria-label="Open menu" type="button">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+      </button>
+      <div class="admin-branding" style="display: flex; align-items: center; gap: 8px;">
+        <img src="assets/logo.png" alt="SINA" style="width: 32px; height: 32px; object-fit: contain; border-radius: 6px; border: 1px solid var(--green-border);">
+        <span class="brand-name" style="color: var(--green-dark); font-weight: 900;">SINA</span>
+        <span class="admin-tag" style="background: var(--green-primary); color: #FFFFFF; font-weight: 700; font-size: 0.65rem; padding: 2px 6px; border-radius: 4px;">ADMIN</span>
+      </div>
+    </div>
+    <div class="top-bar-right">
+      <button id="admin-settings-btn" class="icon-btn" title="App Settings & Policies" type="button">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+      </button>
+      <button id="admin-notif-btn" class="icon-btn notif-bell-btn" title="Live Alerts" type="button">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+        <span id="admin-header-notif-badge" class="notif-counter" style="display: none;">0</span>
+      </button>
+      <button id="admin-refresh-btn" class="icon-btn refresh-btn" title="Instant Refresh Data" aria-label="Refresh" type="button">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg>
+      </button>
+    </div>
+  </header>
+
+
+  <main class="admin-container">
+    <div class="page-header-row">
+      <div>
+        <h1 class="page-title">Commodities & Product Master</h1>
+        <p class="page-subtitle">Configure master commodities, benchmark rates, units, and review field-added products.</p>
+      </div>
+      <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+        <a href="sources.html" class="btn btn-outline btn-sm" style="display: inline-flex; align-items: center; gap: 4px; text-decoration: none; font-weight: 700;">
+          Manage Sources
+        </a>
+        <button type="button" id="btn-open-add-cat" class="btn btn-secondary btn-sm">
+          + Add Category
+        </button>
+        <button type="button" id="btn-open-add-prod" class="btn btn-primary btn-sm">
+          + Add Product
+        </button>
+      </div>
+    </div>
+
+    <!-- Active Categories Chips -->
+    <div class="card" style="margin-bottom: 16px;">
+      <h3 style="font-size: 0.92rem; font-weight: 700; color: var(--green-primary); margin-bottom: 8px;">Active Commodity Categories</h3>
+      <div id="categories-chip-list" style="display: flex; flex-wrap: wrap; gap: 6px;">
+        <span class="text-muted">Loading categories...</span>
+      </div>
+    </div>
+
+    <!-- CATEGORY SELECTOR & TYPES HIERARCHY -->
+    <div class="card" style="margin-bottom: 16px; background: #FFFFFF; border: 1.5px solid var(--border-color); padding: 16px; box-shadow: var(--shadow-sm);">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; flex-wrap: wrap; gap: 8px;">
+        <div>
+          <h3 style="font-size: 1rem; font-weight: 800; color: #166534; margin: 0;">Commodity Types & Subtypes Explorer</h3>
+          <p style="font-size: 0.8rem; color: var(--text-muted); margin: 2px 0 0 0;">Select a category box below to view all Types under it and click any Type to edit its Subtypes.</p>
+        </div>
+        <a href="sources.html" class="btn btn-outline-green btn-sm" style="font-weight: 700; font-size: 0.78rem;">
+          Manage Sources &rarr;
+        </a>
+      </div>
+
+      <!-- Category Small Selector Boxes -->
+      <div id="category-selector-boxes" style="display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 14px;">
+        <!-- Injected: Glass, Metal, Plastic... -->
+      </div>
+
+      <!-- Types Grid for Selected Category -->
+      <div id="category-types-display" style="background: var(--bg-secondary); border-radius: 8px; padding: 14px; border: 1px dashed var(--border-color);">
+        <div style="font-size: 0.85rem; color: var(--text-muted); text-align: center;">Click any category box above to view its Types.</div>
+      </div>
+    </div>
+
+    <!-- Search and Filter Bar -->
+    <div class="rep-filter-bar" style="margin-bottom: 16px;">
+      <div class="filter-left-col" style="width: 100%;">
+        <div style="display: flex; align-items: center; gap: 8px; width: 100%;">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color: var(--text-muted); flex-shrink: 0;"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          <input type="text" id="product-search-input" class="form-input" placeholder="Search product name, variety, or category..." style="width: 100%; border: none; padding: 6px 0; background: transparent; font-size: 0.95rem;">
+        </div>
+      </div>
+    </div>
+
+    <!-- Products Table -->
+    <div class="table-responsive">
+      <table class="admin-table">
+        <thead>
+          <tr>
+            <th>Product Name</th>
+            <th>Type / Variety</th>
+            <th>Category</th>
+            <th>Unit</th>
+            <th>Default Rate</th>
+            <th>Max Buy Price</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody id="products-table-tbody">
+          <tr>
+            <td colspan="7" class="text-center text-muted" style="padding: 24px;">Loading product catalog...</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </main>
+
+  <!-- ADD CATEGORY MODAL -->
+  <div id="add-cat-modal" class="sina-modal-backdrop">
+    <div class="sina-modal-card">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+        <h3 style="font-size: 1.15rem; font-weight: 700; color: var(--green-primary);">Add Product Category</h3>
+        <button class="icon-btn" id="btn-close-cat-modal">&times;</button>
+      </div>
+      <form id="add-cat-form">
+        <div class="form-group">
+          <label class="form-label" for="new_cat_name">Category Name *</label>
+          <input type="text" id="new_cat_name" class="form-input" placeholder="e.g. Edible Oils, Seeds, Fertilisers" required>
+        </div>
+        <button type="submit" class="btn btn-primary btn-block" style="margin-top: 16px;">Save Category</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- EDIT CATEGORY MODAL -->
+  <div id="edit-cat-modal" class="sina-modal-backdrop">
+    <div class="sina-modal-card">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+        <h3 style="font-size: 1.15rem; font-weight: 700; color: var(--green-primary);">Edit Product Category</h3>
+        <button type="button" class="icon-btn" onclick="window.closeEditCategoryModal()">&times;</button>
+      </div>
+      <form id="edit-cat-form" onsubmit="window.saveEditedCategory(event)">
+        <input type="hidden" id="edit-cat-id">
+        <div class="form-group">
+          <label class="form-label" for="edit_cat_name">Category Name (English) *</label>
+          <input type="text" id="edit_cat_name" class="form-input" placeholder="e.g. Glass, Metal, Plastic" required>
+        </div>
+        <div class="form-group" style="margin-top: 10px;">
+          <label class="form-label" for="edit_cat_mr">Marathi Translation (मराठी)</label>
+          <input type="text" id="edit_cat_mr" class="form-input" placeholder="e.g. काच, धातू, प्लास्टिक">
+        </div>
+        <div class="form-group" style="margin-top: 10px;">
+          <label class="form-label" for="edit_cat_hi">Hindi Translation (हिन्दी)</label>
+          <input type="text" id="edit_cat_hi" class="form-input" placeholder="e.g. कांच, धातु, प्लास्टिक">
+        </div>
+        <div style="display: flex; justify-content: flex-end; gap: 8px; margin-top: 18px;">
+          <button type="button" class="btn btn-secondary btn-sm" onclick="window.closeEditCategoryModal()">Cancel</button>
+          <button type="submit" class="btn btn-primary btn-sm">Save Changes</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ADD PRODUCT MODAL -->
+  <div id="add-prod-modal" class="sina-modal-backdrop">
+    <div class="sina-modal-card">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+        <h3 style="font-size: 1.15rem; font-weight: 700; color: var(--green-primary);">Add New Product</h3>
+        <button class="icon-btn" id="btn-close-prod-modal">&times;</button>
+      </div>
+      <form id="add-prod-form">
+        <div class="form-group">
+          <label class="form-label" for="prod_category_select">Category *</label>
+          <select id="prod_category_select" class="form-select" required>
+            <option value="">-- Choose Category --</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="new_prod_name">Product Name *</label>
+          <input type="text" id="new_prod_name" class="form-input" placeholder="e.g. Basmati Rice, Alphonso Mango" required>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="new_prod_type">Type / Grade</label>
+          <input type="text" id="new_prod_type" class="form-input" placeholder="e.g. Super 1121, Grade A">
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="new_prod_unit">Unit of Measure *</label>
+          <select id="new_prod_unit" class="form-select" required>
+            <option value="per_kg">Per Kg</option>
+            <option value="per_piece">Per Piece</option>
+            <option value="per_dozen">Per Dozen</option>
+            <option value="per_box">Per Box</option>
+            <option value="per_bag">Per Bag</option>
+            <option value="per_quintal">Per Quintal</option>
+            <option value="per_litre">Per Litre</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="new_prod_rate">Default Benchmark Rate (â‚¹) *</label>
+          <input type="number" id="new_prod_rate" class="form-input" placeholder="e.g. 45.00" min="0.01" step="any" required>
+          <small class="text-muted" id="new_rate_unit_hint" style="font-size: 0.75rem; display: block; margin-top: 3px;">Rate in â‚¹ per selected unit</small>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="new_prod_max_price">Maximum Allowed Buy Price (â‚¹) *</label>
+          <input type="number" id="new_prod_max_price" class="form-input" placeholder="e.g. 50.00" min="0.01" step="any" required>
+          <small style="font-size: 0.75rem; color: #E65100; font-weight: 600; display: block; margin-top: 3px;" id="new_max_unit_hint">
+            âš ï¸ Field reps cannot enter a rate higher than this price per unit.
+          </small>
+        </div>
+        <button type="submit" class="btn btn-primary btn-block" style="margin-top: 16px;">Add to Catalog</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- EDIT PRODUCT MODAL -->
+  <div id="edit-prod-modal" class="sina-modal-backdrop">
+    <div class="sina-modal-card">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+        <h3 style="font-size: 1.15rem; font-weight: 700; color: var(--green-primary);">Edit Product & Price Limits</h3>
+        <button class="icon-btn" id="btn-close-edit-prod-modal" type="button">&times;</button>
+      </div>
+      <form id="edit-prod-form">
+        <input type="hidden" id="edit_prod_id">
+        <div class="form-group">
+          <label class="form-label" for="edit_prod_category">Category *</label>
+          <select id="edit_prod_category" class="form-select" required>
+            <option value="">-- Choose Category --</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="edit_prod_name">Product Name *</label>
+          <input type="text" id="edit_prod_name" class="form-input" required>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="edit_prod_type">Type / Grade</label>
+          <input type="text" id="edit_prod_type" class="form-input">
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="edit_prod_unit">Unit of Measure *</label>
+          <select id="edit_prod_unit" class="form-select" required>
+            <option value="per_kg">Per Kg</option>
+            <option value="per_piece">Per Piece</option>
+            <option value="per_dozen">Per Dozen</option>
+            <option value="per_box">Per Box</option>
+            <option value="per_bag">Per Bag</option>
+            <option value="per_quintal">Per Quintal</option>
+            <option value="per_litre">Per Litre</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="edit_prod_rate">Default Benchmark Rate (â‚¹) *</label>
+          <input type="number" id="edit_prod_rate" class="form-input" min="0.01" step="any" required>
+          <small class="text-muted" id="edit_rate_unit_hint" style="font-size: 0.75rem; display: block; margin-top: 3px;">Rate in â‚¹ per unit</small>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="edit_prod_max_price">Maximum Allowed Buy Price (â‚¹) *</label>
+          <input type="number" id="edit_prod_max_price" class="form-input" min="0.01" step="any" required>
+          <small style="font-size: 0.75rem; color: #E65100; font-weight: 600; display: block; margin-top: 3px;" id="edit_max_unit_hint">
+            âš ï¸ Field reps cannot enter a rate higher than this price per unit.
+          </small>
+        </div>
+        <button type="submit" class="btn btn-primary btn-block" style="margin-top: 16px;">Save Product Changes</button>
+      </form>
+    </div>
+  </div>
+
+    <!-- Fixed Bottom Taskbar (5 Primary Tabs) -->
+  <nav id="admin-bottom-nav" class="admin-bottom-nav">
+    <a href="index.html" class="admin-nav-item" id="admin-nav-home">
+      <span class="nav-icon-wrap">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+      </span>
+      <span class="nav-text-label">Dashboard</span>
+    </a>
+    <a href="approvals.html" class="admin-nav-item" id="admin-nav-approvals">
+      <span class="nav-icon-wrap">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+        <span id="admin-approvals-badge" class="admin-nav-badge"></span>
+      </span>
+      <span class="nav-text-label">Approvals</span>
+    </a>
+    <a href="representatives.html" class="admin-nav-item" id="admin-nav-reps">
+      <span class="nav-icon-wrap">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+      </span>
+      <span class="nav-text-label">Reps</span>
+    </a>
+    <a href="firms.html" class="admin-nav-item" id="admin-nav-firms">
+      <span class="nav-icon-wrap">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+      </span>
+      <span class="nav-text-label">Firms</span>
+    </a>
+    <a href="history.html" class="admin-nav-item" id="admin-nav-history">
+      <span class="nav-icon-wrap">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+      </span>
+      <span class="nav-text-label">History</span>
+    </a>
+  </nav>
+
+  <!-- Admin Slide-Out Drawer Navigation (All 8 Modules) -->
+  <div id="sina-admin-drawer" class="sina-drawer">
+    <div class="drawer-backdrop" id="admin-drawer-backdrop"></div>
+    <div class="drawer-panel">
+      <div class="drawer-header admin-grad-header">
+        <div class="rep-avatar-box">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        </div>
+        <div class="rep-info">
+          <h4 class="rep-name" id="drawer-admin-name">Operations Admin</h4>
+          <span class="rep-phone" id="drawer-admin-email">admin@sina.com</span>
+          <span class="rep-route-pill">Super Admin</span>
+        </div>
+        <button class="icon-btn close-drawer-btn" id="close-admin-drawer-btn" type="button">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+      </div>
+
+      <nav class="drawer-nav">
+        <a href="index.html" class="drawer-link" id="drawer-link-home">
+          <span class="nav-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></span>
+          <span class="nav-label">Operations Dashboard</span>
+        </a>
+        <a href="representatives.html" class="drawer-link" id="drawer-link-reps">
+          <span class="nav-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></span>
+          <span class="nav-label">Representatives & Passwords</span>
+        </a>
+        <a href="history.html" class="drawer-link" id="drawer-link-history">
+          <span class="nav-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></span>
+          <span class="nav-label">Purchase History</span>
+        </a>
+            <a href="receipts.html" class="drawer-link" id="drawer-link-receipts">
+              <span class="nav-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg></span>
+              <span class="nav-label">Receipts & Vouchers</span>
+            </a>
+            <a href="bank-accounts.html" class="drawer-link" id="drawer-link-banks">
+              <span class="nav-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 2 7 22 7 12 2"/><rect x="4" y="10" width="2" height="9"/><rect x="9" y="10" width="2" height="9"/><rect x="14" y="10" width="2" height="9"/><rect x="19" y="10" width="2" height="9"/><line x1="2" y1="19" x2="22" y2="19"/></svg></span>
+              <span class="nav-label">Company Bank Accounts</span>
+            </a>
+            <a href="purchasing-firms.html" class="drawer-link" id="drawer-link-purchasing-firms">
+              <span class="nav-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg></span>
+              <span class="nav-label">Our Purchasing Firms</span>
+            </a>
+            <a href="sources.html" class="drawer-link" id="drawer-link-sources">
+              <span class="nav-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg></span>
+              <span class="nav-label">Procurement Sources</span>
+            </a>
+        <a href="catalog.html" class="drawer-link" id="drawer-link-catalog">
+          <span class="nav-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg></span>
+          <span class="nav-label">Commodities & Product Master</span>
+        </a>
+        <a href="firms.html" class="drawer-link" id="drawer-link-firms">
+          <span class="nav-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg></span>
+          <span class="nav-label">Firms Directory</span>
+        </a>
+        <a href="godowns.html" class="drawer-link" id="drawer-link-godowns">
+          <span class="nav-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg></span>
+          <span class="nav-label">Godowns & Warehouses</span>
+        </a>
+        <a href="approvals.html" class="drawer-link" id="drawer-link-approvals">
+          <span class="nav-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg></span>
+          <span class="nav-label">Payment Approvals</span>
+        </a>
+        <a href="analytics.html" class="drawer-link" id="drawer-link-analytics">
+          <span class="nav-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg></span>
+          <span class="nav-label">Operational Analytics</span>
+        </a>
+        <a href="locations.html" class="drawer-link" id="drawer-link-locations">
+          <span class="nav-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg></span>
+          <span class="nav-label">Field Rep GPS Tracking</span>
+        </a>
+      </nav>
+
+      <div class="drawer-footer">
+        <button type="button" class="btn btn-outline-green btn-block" style="margin-bottom: 8px;" onclick="window.openSettingsModal()">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+          App Policies & Settings
+        </button>
+        <button type="button" class="btn btn-outline-green btn-block" style="color: var(--danger-color); border-color: rgba(220,38,38,0.4); margin-bottom: 8px;" onclick="window.triggerSystemReset()">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg>
+          Reset All Data
+        </button>
+        <button type="button" class="btn btn-logout btn-block" onclick="window.sinaAdminAuth ? window.sinaAdminAuth.logout() : (window.location.href='login.html')">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+          Sign Out
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Settings & Permissions Modal -->
+  <div id="admin-settings-modal" class="sina-modal-backdrop">
+    <div class="sina-modal-card" style="max-width: 480px; padding: 20px;">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px;">
+        <div style="display: flex; align-items: center; gap: 8px;">
+          <img src="assets/logo.png" alt="SINA" style="width: 28px; height: 28px; object-fit: contain;">
+          <h3 style="font-size: 1.15rem; font-weight: 800; color: var(--green-dark); margin: 0;">App Policies & Permissions</h3>
+        </div>
+        <button type="button" class="icon-btn" onclick="window.closeSettingsModal()">&times;</button>
+      </div>
+      
+      <div style="background: var(--bg-secondary); border-radius: var(--radius-sm); padding: 14px; margin-bottom: 12px; border: 1px solid var(--border-color);">
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+          <div>
+            <strong style="font-size: 0.95rem; color: var(--text-primary);">Mandatory Expense Receipt Photo</strong>
+            <p class="text-muted" style="font-size: 0.78rem; margin: 4px 0 0 0;">Require field reps to upload a bill/receipt photo before an expense can be saved.</p>
+          </div>
+          <label style="position: relative; display: inline-block; width: 44px; height: 24px; margin-left: 12px;">
+            <input type="checkbox" id="setting-require-receipt-chk" style="opacity: 0; width: 0; height: 0;">
+            <span id="slider-require-receipt" style="position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #CBD5E1; transition: .3s; border-radius: 24px;"></span>
+          </label>
+        </div>
+      </div>
+
+      <div style="background: var(--bg-secondary); border-radius: var(--radius-sm); padding: 14px; margin-bottom: 16px; border: 1px solid var(--border-color);">
+        <strong style="font-size: 0.88rem; display: block; margin-bottom: 10px;">Android System Permissions</strong>
+        <div style="display: flex; flex-direction: column; gap: 8px; margin-bottom: 12px;">
+          <div style="display: flex; justify-content: space-between; align-items: center;">
+            <div>
+              <span style="font-size: 0.82rem; font-weight: 600; color: var(--text-primary); display: block;">High Priority Alerts</span>
+              <span style="font-size: 0.72rem; color: var(--text-muted);">Real-time purchase & payment sound/vibration</span>
+            </div>
+            <span class="badge" style="background: var(--green-tint); color: var(--green-dark); border: 1px solid var(--green-border); font-weight: 700;">Granted</span>
+          </div>
+          <div style="display: flex; justify-content: space-between; align-items: center;">
+            <div>
+              <span style="font-size: 0.82rem; font-weight: 600; color: var(--text-primary); display: block;">Location / GPS</span>
+              <span style="font-size: 0.72rem; color: var(--text-muted);">View field representative live coordinates</span>
+            </div>
+            <span class="badge" style="background: var(--green-tint); color: var(--green-dark); border: 1px solid var(--green-border); font-weight: 700;">Granted</span>
+          </div>
+          <div style="display: flex; justify-content: space-between; align-items: center;">
+            <div>
+              <span style="font-size: 0.82rem; font-weight: 600; color: var(--text-primary); display: block;">Camera & Storage</span>
+              <span style="font-size: 0.72rem; color: var(--text-muted);">Receipt & passbook review attachments</span>
+            </div>
+            <span class="badge" style="background: var(--green-tint); color: var(--green-dark); border: 1px solid var(--green-border); font-weight: 700;">Granted</span>
+          </div>
+        </div>
+        <button type="button" class="btn btn-outline-green btn-sm btn-block" onclick="if(window.FlutterBridge){window.FlutterBridge.postMessage(JSON.stringify({action:'OPEN_APP_SETTINGS'}))}else{alert('Available on Android')}" style="font-size: 0.8rem; font-weight: 700;">
+          Open Android App Settings
+        </button>
+      </div>
+
+      <div style="display: flex; justify-content: flex-end; gap: 8px;">
+        <button type="button" class="btn btn-secondary btn-sm" onclick="window.closeSettingsModal()">Cancel</button>
+        <button type="button" class="btn btn-primary btn-sm" onclick="window.saveSettings()">Save Configuration</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notification Container -->
+  <div id="admin-toast-container" class="admin-toast-container"></div>
+
+<!-- Scripts -->
+  <script src="js/config.js"></script>
+  <script src="js/icons.js"></script>
+  <script src="js/db.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/translate.js"></script>
+  <script src="js/nav.js"></script>
+  <script src="js/catalog.js"></script>
+</body>
+</html>

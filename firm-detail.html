@@ -1,0 +1,342 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Firm Bill History & Representative Analytics - SINA Admin</title>
+  <meta name="theme-color" content="#1E513A">
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <meta http-equiv="Pragma" content="no-cache">
+  <meta http-equiv="Expires" content="0">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="SINA Admin">
+  <link rel="icon" type="image/x-icon" href="favicon.ico">
+  <link rel="icon" type="image/png" sizes="192x192" href="assets/icon-192.png">
+  <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
+  <link rel="manifest" href="manifest.json">
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/admin.css">
+  <style>
+    .firm-hero-card {
+      background: linear-gradient(135deg, var(--green-dark, #163E2C), var(--green-primary, #1E513A));
+      color: #FFFFFF;
+      border-radius: var(--radius-lg);
+      padding: 20px;
+      margin-bottom: 20px;
+      box-shadow: 0 4px 16px rgba(30, 81, 58, 0.25);
+    }
+    .firm-kpi-pill {
+      background: rgba(255, 255, 255, 0.15);
+      border: 1px solid rgba(255, 255, 255, 0.25);
+      border-radius: var(--radius-md);
+      padding: 10px 16px;
+      text-align: center;
+      min-width: 120px;
+    }
+    .firm-kpi-lbl {
+      font-size: 0.72rem;
+      font-weight: 700;
+      color: rgba(255, 255, 255, 0.85);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .firm-kpi-num {
+      font-size: 1.35rem;
+      font-weight: 900;
+      color: #FFFFFF;
+      margin-top: 4px;
+    }
+    .rep-stat-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 12px 14px;
+      border-bottom: 1px solid var(--border-color);
+      background: var(--bg-primary);
+    }
+    .rep-stat-row:last-child {
+      border-bottom: none;
+    }
+    .rep-stat-row:hover {
+      background: var(--green-tint);
+    }
+  </style>
+</head>
+<body>
+  <!-- Top Persistent Header Taskbar -->
+  <header id="sina-admin-header" class="admin-top-bar">
+    <div class="top-bar-left">
+      <button id="admin-drawer-toggle-btn" class="icon-btn" aria-label="Open menu" type="button">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+      </button>
+      <div class="admin-branding" style="display: flex; align-items: center; gap: 8px;">
+        <img src="assets/logo.png" alt="SINA" style="width: 32px; height: 32px; object-fit: contain; border-radius: 6px; border: 1px solid var(--green-border);">
+        <span class="brand-name" style="color: var(--green-dark); font-weight: 900;">SINA</span>
+        <span class="admin-tag" style="background: var(--green-primary); color: #FFFFFF; font-weight: 700; font-size: 0.65rem; padding: 2px 6px; border-radius: 4px;">ADMIN</span>
+      </div>
+    </div>
+    <div class="top-bar-right">
+      <button id="admin-settings-btn" class="icon-btn" title="App Settings & Policies" type="button">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+      </button>
+      <button id="admin-notif-btn" class="icon-btn notif-bell-btn" title="Live Alerts" type="button">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+        <span id="admin-header-notif-badge" class="notif-counter" style="display: none;">0</span>
+      </button>
+      <button id="admin-refresh-btn" class="icon-btn refresh-btn" title="Instant Refresh Data" aria-label="Refresh" type="button">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg>
+      </button>
+    </div>
+  </header>
+
+  <main class="admin-container">
+    <!-- Back Navigation Link -->
+    <div style="margin-bottom: 12px;">
+      <a href="firms.html" class="text-green font-bold" style="font-size: 0.88rem; display: inline-flex; align-items: center; gap: 6px; text-decoration: none; color: var(--green-dark);">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>
+        Back to Firms Directory
+      </a>
+    </div>
+
+    <!-- Firm Hero Card -->
+    <div class="firm-hero-card">
+      <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 12px; margin-bottom: 14px;">
+        <div>
+          <div style="font-size: 0.75rem; text-transform: uppercase; font-weight: 700; letter-spacing: 0.5px; opacity: 0.85;">Merchant Procurement Partner</div>
+          <h1 id="firm-hero-name" style="font-size: 1.6rem; font-weight: 900; margin: 4px 0 6px 0; color: #FFFFFF;">Loading Firm...</h1>
+          <div style="font-size: 0.88rem; opacity: 0.95; display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+            <span>Contact: <strong id="firm-hero-contact">---</strong></span>
+            <span>&bull;</span>
+            <span id="firm-hero-phone-wrap"></span>
+          </div>
+          <div style="font-size: 0.82rem; opacity: 0.9; margin-top: 4px;" id="firm-hero-address">
+            Address: ---
+          </div>
+          <div style="font-size: 0.82rem; opacity: 0.9; margin-top: 4px;" id="firm-hero-upi">
+            UPI: ---
+          </div>
+        </div>
+
+        <div style="display: flex; gap: 8px; align-items: center;">
+          <button type="button" id="btn-open-edit-firm" class="btn btn-secondary btn-sm" style="background: rgba(255,255,255,0.2); border: 1px solid rgba(255,255,255,0.4); color: #FFFFFF; font-weight: 700;">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+            Edit Firm Info
+          </button>
+        </div>
+      </div>
+
+      <!-- Financial KPI Stats Row -->
+      <div style="display: flex; flex-wrap: wrap; gap: 10px; padding-top: 14px; border-top: 1px solid rgba(255,255,255,0.2);">
+        <div class="firm-kpi-pill">
+          <div class="firm-kpi-lbl">Total Spent</div>
+          <div class="firm-kpi-num" id="firm-kpi-spent">â‚¹0</div>
+        </div>
+        <div class="firm-kpi-pill">
+          <div class="firm-kpi-lbl">Total Orders / Bills</div>
+          <div class="firm-kpi-num" id="firm-kpi-bills">0</div>
+        </div>
+        <div class="firm-kpi-pill">
+          <div class="firm-kpi-lbl">Avg Order Value</div>
+          <div class="firm-kpi-num" id="firm-kpi-avg">â‚¹0</div>
+        </div>
+        <div class="firm-kpi-pill">
+          <div class="firm-kpi-lbl">Reps Visited</div>
+          <div class="firm-kpi-num" id="firm-kpi-reps-count">0</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Section 1: Visiting Representatives Breakdown (Who made how much entries) -->
+    <div class="card" style="margin-bottom: 20px;">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+        <div>
+          <h2 style="font-size: 1.1rem; font-weight: 800; color: var(--green-dark); margin: 0;">Visiting Representatives Breakdown</h2>
+          <p class="text-muted" style="font-size: 0.8rem; margin: 2px 0 0 0;">Entries logged and total purchase volume handled by each representative</p>
+        </div>
+        <span class="status-badge active" id="firm-reps-badge">0 Reps</span>
+      </div>
+
+      <div class="table-responsive">
+        <table class="admin-table">
+          <thead>
+            <tr>
+              <th>Representative</th>
+              <th>Entries Logged</th>
+              <th>Total Amount Bought</th>
+              <th>Share of Purchases</th>
+              <th>Last Visit</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody id="firm-reps-tbody">
+            <tr><td colspan="6" class="text-center text-muted" style="padding: 20px;">Loading representative breakdown...</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Section 2: Complete Itemized Order & Bill History -->
+    <div class="card">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; flex-wrap: wrap; gap: 8px;">
+        <div>
+          <h2 style="font-size: 1.1rem; font-weight: 800; color: var(--green-dark); margin: 0;">Complete Bill & Transaction History</h2>
+          <p class="text-muted" style="font-size: 0.8rem; margin: 2px 0 0 0;">All purchases, rates, payment modes, and proof attachments</p>
+        </div>
+        <div style="display: flex; align-items: center; gap: 8px;">
+          <input type="text" id="firm-bills-filter" class="form-input" placeholder="Search bills or items..." style="padding: 6px 10px; font-size: 0.82rem; width: 180px;">
+          <span class="status-badge active" id="firm-total-bills-badge">0 Bills</span>
+        </div>
+      </div>
+
+      <div class="table-responsive">
+        <table class="admin-table">
+          <thead>
+            <tr>
+              <th>Date & Time</th>
+              <th>Representative</th>
+              <th>Items & Goods</th>
+              <th>Amount</th>
+              <th>Payment Mode & Status</th>
+              <th>UTR / Reference</th>
+              <th>Proofs</th>
+            </tr>
+          </thead>
+          <tbody id="firm-bills-tbody">
+            <tr><td colspan="7" class="text-center text-muted" style="padding: 24px;">Loading bill history...</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </main>
+
+  <!-- EDIT FIRM MODAL -->
+  <div id="edit-firm-modal" class="sina-modal-backdrop">
+    <div class="sina-modal-card" style="max-width: 480px;">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+        <h3 style="font-size: 1.15rem; font-weight: 700; color: var(--green-dark); margin: 0;">Edit Merchant Firm</h3>
+        <button class="icon-btn" id="btn-close-edit-firm-modal">&times;</button>
+      </div>
+      <form id="edit-firm-form">
+        <div class="form-group">
+          <label class="form-label" for="edit_firm_name">Firm / Business Name *</label>
+          <input type="text" id="edit_firm_name" class="form-input" required>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="edit_contact_person">Contact Person Name *</label>
+          <input type="text" id="edit_contact_person" class="form-input" required>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="edit_firm_mobile">Mobile Number *</label>
+          <input type="tel" id="edit_firm_mobile" class="form-input" maxlength="10" required>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="edit_firm_address">Mandi / Shop Address *</label>
+          <textarea id="edit_firm_address" class="form-textarea" rows="2" required></textarea>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="edit_firm_upi">Firm UPI ID (Optional)</label>
+          <input type="text" id="edit_firm_upi" class="form-input" placeholder="merchant@okaxis">
+        </div>
+        <button type="submit" class="btn btn-primary btn-block" style="margin-top: 16px;">Save Changes</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- High-Res Image Inspection Modal -->
+  <div id="firm-img-modal" class="sina-modal-backdrop" onclick="closeFirmImg()">
+    <div class="sina-modal-card" style="padding: 14px; text-align: center;" onclick="event.stopPropagation()">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+        <span class="status-badge active">Bill & Payment Proof</span>
+        <button class="icon-btn" onclick="closeFirmImg()">&times;</button>
+      </div>
+      <img id="firm-modal-img" src="" style="width: 100%; max-height: 75vh; object-fit: contain; border-radius: var(--radius-md);" alt="Proof">
+    </div>
+  </div>
+
+  <!-- Fixed Bottom Taskbar (5 Primary Tabs) -->
+  <nav id="admin-bottom-nav" class="admin-bottom-nav">
+    <a href="index.html" class="admin-nav-item" id="admin-nav-home">
+      <span class="nav-icon-wrap">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+      </span>
+      <span class="nav-text-label">Dashboard</span>
+    </a>
+    <a href="approvals.html" class="admin-nav-item" id="admin-nav-approvals">
+      <span class="nav-icon-wrap">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+        <span id="admin-approvals-badge" class="admin-nav-badge"></span>
+      </span>
+      <span class="nav-text-label">Approvals</span>
+    </a>
+    <a href="representatives.html" class="admin-nav-item" id="admin-nav-reps">
+      <span class="nav-icon-wrap">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+      </span>
+      <span class="nav-text-label">Reps</span>
+    </a>
+    <a href="firms.html" class="admin-nav-item" id="admin-nav-firms">
+      <span class="nav-icon-wrap">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+      </span>
+      <span class="nav-text-label">Firms</span>
+    </a>
+    <a href="history.html" class="admin-nav-item" id="admin-nav-history">
+      <span class="nav-icon-wrap">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+      </span>
+      <span class="nav-text-label">History</span>
+    </a>
+  </nav>
+
+  <!-- Admin Slide-Out Drawer Navigation (All 8 Modules) -->
+  <div id="sina-admin-drawer" class="sina-drawer">
+    <div class="drawer-backdrop" id="admin-drawer-backdrop"></div>
+    <div class="drawer-panel">
+      <div class="drawer-header admin-grad-header">
+        <div class="rep-avatar-box">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        </div>
+        <div class="rep-info">
+          <h4 class="rep-name" id="drawer-admin-name">Operations Admin</h4>
+          <span class="rep-phone" id="drawer-admin-email">admin@sina.com</span>
+          <span class="rep-route-pill">Super Admin</span>
+        </div>
+        <button class="icon-btn close-drawer-btn" id="close-admin-drawer-btn" type="button">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+      </div>
+
+      <nav class="drawer-nav">
+        <a href="index.html" class="drawer-link"><span class="nav-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></span><span class="nav-label">Operations Dashboard</span></a>
+        <a href="representatives.html" class="drawer-link"><span class="nav-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></span><span class="nav-label">Representatives & Passwords</span></a>
+        <a href="history.html" class="drawer-link"><span class="nav-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></span><span class="nav-label">Purchase History</span></a>
+        <a href="catalog.html" class="drawer-link"><span class="nav-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg></span><span class="nav-label">Commodities & Product Master</span></a>
+        <a href="firms.html" class="drawer-link active"><span class="nav-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg></span><span class="nav-label">Firms Directory</span></a>
+        <a href="godowns.html" class="drawer-link"><span class="nav-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg></span><span class="nav-label">Godowns & Warehouses</span></a>
+        <a href="approvals.html" class="drawer-link"><span class="nav-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg></span><span class="nav-label">Payment Approvals</span></a>
+        <a href="analytics.html" class="drawer-link"><span class="nav-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg></span><span class="nav-label">Operational Analytics</span></a>
+        <a href="locations.html" class="drawer-link"><span class="nav-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg></span><span class="nav-label">Field Rep GPS Tracking</span></a>
+      </nav>
+      <div class="drawer-footer">
+        <button type="button" class="btn btn-logout btn-block" onclick="window.sinaAdminAuth ? window.sinaAdminAuth.logout() : (window.location.href='login.html')">
+          Sign Out
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notification Container -->
+  <div id="admin-toast-container" class="admin-toast-container"></div>
+
+  <!-- Scripts -->
+  <script src="js/config.js"></script>
+  <script src="js/icons.js"></script>
+  <script src="js/db.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/translate.js"></script>
+  <script src="js/nav.js"></script>
+  <script src="js/firm-detail.js"></script>
+</body>
+</html>

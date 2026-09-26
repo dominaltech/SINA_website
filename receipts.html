@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Procurement Receipts - SINA Admin</title>
+  <meta name="theme-color" content="#1B5E20">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="SINA Admin">
+  <link rel="icon" type="image/x-icon" href="favicon.ico">
+  <link rel="icon" type="image/png" sizes="192x192" href="assets/icon-192.png">
+  <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
+  <link rel="manifest" href="manifest.json">
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/admin.css">
+  <!-- HTML2Canvas & jsPDF for Image and PDF generation -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <style>
+    /* Printable Voucher Styling */
+    .voucher-card {
+      background: #FFFFFF;
+      border: 1px solid #CBD5E1;
+      border-radius: 8px;
+      padding: 24px;
+      max-width: 600px;
+      margin: 0 auto;
+      color: #0F172A;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.06);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    }
+    .voucher-header {
+      text-align: center;
+      border-bottom: 2px solid #E2E8F0;
+      padding-bottom: 14px;
+      margin-bottom: 14px;
+    }
+    .voucher-firm-name {
+      font-size: 1.35rem;
+      font-weight: 900;
+      color: #1B5E20;
+      text-transform: uppercase;
+      letter-spacing: 0.02em;
+    }
+    .voucher-firm-gst {
+      font-size: 0.88rem;
+      font-weight: 700;
+      color: #334155;
+      margin-top: 3px;
+    }
+    .voucher-firm-opt {
+      font-size: 0.8rem;
+      color: #64748B;
+      margin-top: 2px;
+    }
+    .voucher-meta-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      font-size: 0.82rem;
+      background: #F8FAFC;
+      padding: 10px 12px;
+      border-radius: 6px;
+      border: 1px solid #E2E8F0;
+      margin-bottom: 14px;
+    }
+    .voucher-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 14px;
+      font-size: 0.82rem;
+    }
+    .voucher-table th {
+      background: #F1F5F9;
+      color: #334155;
+      font-weight: 800;
+      padding: 8px;
+      border: 1px solid #E2E8F0;
+      text-align: left;
+    }
+    .voucher-table td {
+      padding: 8px;
+      border: 1px solid #E2E8F0;
+    }
+    .voucher-total-row {
+      display: flex;
+      justify-content: flex-end;
+      margin-top: 10px;
+    }
+    .voucher-total-box {
+      width: 240px;
+      font-size: 0.88rem;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    .voucher-footer {
+      border-top: 1px dashed #CBD5E1;
+      padding-top: 14px;
+      margin-top: 18px;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      font-size: 0.78rem;
+      color: #64748B;
+    }
+    @media print {
+      body * {
+        visibility: hidden;
+      }
+      #printable-voucher-area, #printable-voucher-area * {
+        visibility: visible;
+      }
+      #printable-voucher-area {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Top Persistent Header Taskbar -->
+  <header id="sina-admin-header" class="admin-top-bar"></header>
+
+
+  <main class="admin-container">
+    <div class="page-header-row" style="margin-bottom: 16px;">
+      <div>
+        <h1 class="page-title">Procurement Receipts & Vouchers</h1>
+        <p class="page-subtitle">View, print, and download official payment receipts as PDF or Image.</p>
+      </div>
+      <div>
+        <button type="button" id="btn-receipt-settings" class="btn btn-outline btn-sm" onclick="window.openReceiptSettingsModal()">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right: 4px;"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+          Receipt Format Settings
+        </button>
+      </div>
+    </div>
+
+    <!-- Search & Filter Controls -->
+    <div class="card" style="padding: 14px; margin-bottom: 18px;">
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 10px;">
+        <div>
+          <label class="form-label" style="font-size: 0.78rem;">Search Receipt / Seller / Rep</label>
+          <input type="text" id="search-receipt-input" class="form-input" placeholder="Type name, firm, voucher #...">
+        </div>
+        <div>
+          <label class="form-label" style="font-size: 0.78rem;">Filter by Our Purchasing Firm</label>
+          <select id="filter-firm-select" class="form-select">
+            <option value="all">All Purchasing Firms</option>
+          </select>
+        </div>
+        <div>
+          <label class="form-label" style="font-size: 0.78rem;">Filter by Tax Mode</label>
+          <select id="filter-gst-select" class="form-select">
+            <option value="all">All Transactions</option>
+            <option value="gst">With GST Bills Only</option>
+            <option value="nogst">Non-GST Bills Only</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <!-- Receipts Cards Ledger -->
+    <div id="receipts-list-container" style="display: flex; flex-direction: column; gap: 12px; margin-bottom: 24px;">
+      <div style="text-align: center; padding: 32px; color: var(--text-secondary);">Loading receipts...</div>
+    </div>
+  </main>
+
+  <!-- Modal: Receipt Preview & Actions (PDF / Image / Print) -->
+  <div id="voucher-preview-modal" class="sina-modal-backdrop">
+    <div class="sina-modal-card" style="max-width: 680px; width: 95%; max-height: 90vh; overflow-y: auto; padding: 20px;">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px;">
+        <h3 style="margin: 0; font-size: 1.1rem; font-weight: 800; color: var(--text-primary);">Procurement Receipt Voucher</h3>
+        <button type="button" class="icon-btn" onclick="window.closeVoucherModal()" style="font-size: 1.2rem;">&times;</button>
+      </div>
+
+      <!-- Voucher Actions Bar -->
+      <div style="display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 14px; background: var(--bg-secondary); padding: 10px; border-radius: 6px;">
+        <button type="button" id="btn-download-pdf" class="btn btn-primary btn-sm">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right: 4px;"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          Download as PDF
+        </button>
+        <button type="button" id="btn-download-image" class="btn btn-outline-green btn-sm">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right: 4px;"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+          Download as Image (PNG)
+        </button>
+        <button type="button" id="btn-print-voucher" class="btn btn-outline btn-sm">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right: 4px;"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
+          Print Receipt
+        </button>
+      </div>
+
+      <!-- Printable Voucher Content Area -->
+      <div id="printable-voucher-area">
+        <div class="voucher-card" id="voucher-render-element">
+          <!-- Injected dynamically by receipts.js -->
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal: Receipt Format Settings -->
+  <div id="receipt-settings-modal" class="sina-modal-backdrop">
+    <div class="sina-modal-card" style="max-width: 480px; width: 90%; padding: 20px;">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px;">
+        <h3 style="margin: 0; font-size: 1.1rem; font-weight: 800; color: var(--text-primary);">Receipt Format Settings</h3>
+        <button type="button" class="icon-btn" onclick="window.closeReceiptSettingsModal()" style="font-size: 1.2rem;">&times;</button>
+      </div>
+
+      <div class="form-group">
+        <label style="display: flex; align-items: center; gap: 8px; font-weight: 700; cursor: pointer;">
+          <input type="checkbox" id="setting-show-logo" checked>
+          <span>Display SINA Logo on Receipt</span>
+        </label>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Receipt Header Tagline / Subtitle</label>
+        <input type="text" id="setting-subtitle" class="form-input" placeholder="e.g. Official Goods Procurement Voucher">
+      </div>
+      <div class="form-group">
+        <label style="display: flex; align-items: center; gap: 8px; font-weight: 700; cursor: pointer;">
+          <input type="checkbox" id="setting-show-address" checked>
+          <span>Show Our Purchasing Firm Address (if provided)</span>
+        </label>
+      </div>
+      <div class="form-group">
+        <label style="display: flex; align-items: center; gap: 8px; font-weight: 700; cursor: pointer;">
+          <input type="checkbox" id="setting-show-phone" checked>
+          <span>Show Our Purchasing Firm Phone Number (if provided)</span>
+        </label>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Footer Terms & Conditions / Note</label>
+        <textarea id="setting-footer-terms" class="form-textarea" rows="2" placeholder="e.g. Weighbridge weight final. Goods received in good condition."></textarea>
+      </div>
+      <div style="display: flex; justify-content: flex-end; gap: 8px; margin-top: 16px;">
+        <button type="button" class="btn btn-secondary btn-sm" onclick="window.closeReceiptSettingsModal()">Cancel</button>
+        <button type="button" class="btn btn-primary btn-sm" id="btn-save-receipt-settings">Save Format Settings</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notification Container -->
+  <div id="admin-toast-container" class="admin-toast-container"></div>
+
+  <!-- Scripts -->
+  <script src="js/config.js"></script>
+  <script src="js/icons.js"></script>
+  <script src="js/db.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/translate.js"></script>
+  <script src="js/nav.js"></script>
+  <script src="js/receipts.js"></script>
+</body>
+</html>

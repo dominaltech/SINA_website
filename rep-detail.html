@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Live Representative Activity - SINA Admin</title>
+  <meta name="theme-color" content="#1E513A">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="SINA Admin">
+  <link rel="icon" type="image/x-icon" href="favicon.ico">
+  <link rel="icon" type="image/png" sizes="192x192" href="assets/icon-192.png">
+  <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
+  <link rel="manifest" href="manifest.json">
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/admin.css">
+</head>
+<body>
+  <!-- Top Persistent Header Taskbar -->
+  <header id="sina-admin-header" class="admin-top-bar">
+    <div class="top-bar-left">
+      <button id="admin-drawer-toggle-btn" class="icon-btn" aria-label="Open menu" type="button">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+      </button>
+      <div class="admin-branding" style="display: flex; align-items: center; gap: 8px;">
+        <img src="assets/logo.png" alt="SINA" style="width: 32px; height: 32px; object-fit: contain; border-radius: 6px; border: 1px solid var(--green-border);">
+        <span class="brand-name" style="color: var(--green-dark); font-weight: 900;">SINA</span>
+        <span class="admin-tag" style="background: var(--green-primary); color: #FFFFFF; font-weight: 700; font-size: 0.65rem; padding: 2px 6px; border-radius: 4px;">ADMIN</span>
+      </div>
+    </div>
+    <div class="top-bar-right">
+      <button id="admin-settings-btn" class="icon-btn" title="App Settings & Policies" type="button">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+      </button>
+      <button id="admin-notif-btn" class="icon-btn notif-bell-btn" title="Live Alerts" type="button">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+        <span id="admin-header-notif-badge" class="notif-counter" style="display: none;">0</span>
+      </button>
+      <button id="admin-refresh-btn" class="icon-btn refresh-btn" title="Instant Refresh Data" aria-label="Refresh" type="button">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg>
+      </button>
+    </div>
+  </header>
+
+
+  <main class="admin-container">
+    <!-- Back link & Header -->
+    <div style="margin-bottom: 12px;">
+      <a href="representatives.html" class="text-purple font-bold" style="font-size: 0.85rem; display: inline-flex; align-items: center; gap: 4px;">
+        &larr; Back to Representatives
+      </a>
+    </div>
+
+    <div class="page-header-row">
+      <div>
+        <div style="display: flex; align-items: center; gap: 10px;">
+          <h1 class="page-title" id="rep-detail-name">Representative Details</h1>
+          <span id="rep-detail-status" class="status-badge active">Active in Field</span>
+        </div>
+        <p class="page-subtitle">
+          Phone: <strong id="rep-detail-phone">+91 9811223344</strong> &bull; Route: <strong id="rep-detail-route">North Wholesale Market</strong>
+        </p>
+      </div>
+      <div>
+        <button type="button" id="btn-issue-float" class="btn btn-primary btn-sm">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="6" width="20" height="12" rx="2"/><circle cx="12" cy="12" r="2"/></svg>
+          Give Cash / Adjust Cash
+        </button>
+      </div>
+    </div>
+
+    <!-- Representative Cumulative Multi-Day Net Balance Hero Card -->
+    <div class="total-balance-card" style="background: linear-gradient(135deg, var(--brand-green, #1E513A), var(--brand-green-interactive, #2D6A4F)); color: #FFFFFF; border-radius: var(--radius-lg); padding: 18px 20px; margin-bottom: 20px; box-shadow: 0 4px 16px rgba(30, 81, 58, 0.25);">
+      <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 6px;">
+        <span style="font-size: 0.82rem; text-transform: uppercase; font-weight: 700; letter-spacing: 0.5px; opacity: 0.9;">Total Balance Remaining (Till Now)</span>
+        <span class="badge" style="background: rgba(255,255,255,0.2); color: #FFFFFF; border: none; font-size: 0.72rem; padding: 3px 10px; border-radius: 4px;">Cumulative All-Time</span>
+      </div>
+      <div style="font-size: 2rem; font-weight: 900; letter-spacing: -0.5px; margin-bottom: 10px;" id="rep-hero-total-balance">â‚¹0.00</div>
+      <div style="display: flex; flex-wrap: wrap; gap: 16px; font-size: 0.8rem; opacity: 0.92; padding-top: 10px; border-top: 1px solid rgba(255,255,255,0.2);">
+        <span>Total Floats: <strong id="rep-hero-total-floats">â‚¹0.00</strong></span>
+        <span>Total Cash Spent: <strong id="rep-hero-total-cash-spent">â‚¹0.00</strong></span>
+        <span>Total Expenses: <strong id="rep-hero-total-expenses">â‚¹0.00</strong></span>
+      </div>
+    </div>
+
+    <!-- Representative Financial Ledger & KPI Cards -->
+    <div class="admin-kpi-grid">
+      <div class="admin-kpi-card">
+        <div class="kpi-label">Total Cash Given</div>
+        <div class="kpi-number text-purple" id="rep-metric-cash-overall">â‚¹0</div>
+        <div class="kpi-sub">All-time cash given</div>
+      </div>
+      <div class="admin-kpi-card">
+        <div class="kpi-label">Cash Given Today</div>
+        <div class="kpi-number" id="rep-metric-cash-today">â‚¹0</div>
+        <div class="kpi-sub">Today's cash given</div>
+      </div>
+      <div class="admin-kpi-card">
+        <div class="kpi-label">Goods Bought Today</div>
+        <div class="kpi-number" id="rep-metric-procured">â‚¹0</div>
+        <div class="kpi-sub">Total purchases today</div>
+      </div>
+      <div class="admin-kpi-card kpi-danger">
+        <div class="kpi-label">Daily Expenses</div>
+        <div class="kpi-number" style="color: var(--danger-color);" id="rep-metric-expenses">- â‚¹0</div>
+        <div class="kpi-sub">Travel & food today</div>
+      </div>
+      <div class="admin-kpi-card kpi-warning">
+        <div class="kpi-label">Remaining Cash in Hand</div>
+        <div class="kpi-number" style="color: var(--purple-dark);" id="rep-metric-net-cash">â‚¹0</div>
+        <div class="kpi-sub">Cash Given - Purchases - Expenses</div>
+      </div>
+    </div>
+
+    <!-- Calendar Choosing & Selected Day's Operations -->
+    <div class="card" style="margin-top: 24px; padding: 18px; border: 1px solid var(--purple-border); background: var(--bg-primary);">
+      <div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 12px; margin-bottom: 14px; border-bottom: 1px solid var(--border-color); padding-bottom: 12px;">
+        <div>
+          <div style="display: flex; align-items: center; gap: 8px;">
+            <span style="color: var(--purple-primary); display: flex; align-items: center;">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+            </span>
+            <h3 style="font-size: 1.15rem; font-weight: 800; color: var(--purple-primary); margin: 0;">Date-Specific Cash & Purchases</h3>
+          </div>
+          <p class="text-muted" style="font-size: 0.8rem; margin-top: 2px;">Pick any date from the calendar to view that day's cash given and purchase history</p>
+        </div>
+
+        <!-- Calendar Date Picker -->
+        <div style="display: flex; align-items: center; gap: 8px;">
+          <input type="date" id="rep-calendar-date" class="form-input" style="padding: 6px 12px; font-weight: 700; width: auto;">
+          <button type="button" class="btn btn-outline-purple btn-sm" id="btn-rep-date-today" style="padding: 6px 14px;">Today</button>
+        </div>
+      </div>
+
+      <!-- Selected Day's Cash Given Card -->
+      <div id="rep-day-cash-banner">
+        <div class="text-muted text-center" style="padding: 16px;">Loading date details...</div>
+      </div>
+    </div>
+
+    <!-- Purchase History for Selected Date -->
+    <div style="margin-top: 24px;">
+      <div class="page-header-row" style="margin-bottom: 10px;">
+        <div>
+          <h3 style="font-size: 1.18rem; font-weight: 800; color: var(--purple-primary);" id="rep-day-history-title">Purchase History for Selected Date</h3>
+          <p class="text-muted" style="font-size: 0.82rem;" id="rep-day-history-sub">Showing purchases and field activity for this date</p>
+        </div>
+        <span class="status-badge active" id="rep-day-visits-count">0 Purchases</span>
+      </div>
+
+      <div id="rep-day-purchases-container">
+        <div class="card text-center text-muted" style="padding: 24px;">Loading purchase history...</div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Floating Multi-Select Batch Actions Bar for Rep Purchases -->
+  <div id="rep-batch-bar" class="multi-select-bar">
+    <div style="display:flex; align-items:center; gap:8px;">
+      <span class="multi-select-count" id="rep-selected-count">0 Selected</span>
+    </div>
+    <div style="display:flex; align-items:center; gap:8px;">
+      <button type="button" class="btn btn-danger btn-sm" onclick="batchDeleteSelectedRepPurchases()" style="background:#DC2626; border:none; color:#FFFFFF; padding:6px 14px; font-weight:700; border-radius:20px; display:inline-flex; align-items:center; gap:6px;">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+        Delete Selected
+      </button>
+      <button type="button" class="btn btn-secondary btn-sm" onclick="clearRepSelection()" style="background:rgba(255,255,255,0.15); border:none; color:#FFFFFF; padding:6px 12px; font-weight:700; border-radius:20px;">
+        Deselect
+      </button>
+    </div>
+  </div>
+
+  <!-- EDIT ORDER MODAL FOR REP -->
+  <div id="edit-rep-order-modal" class="sina-modal-backdrop">
+    <div class="sina-modal-card" style="max-width:480px; max-height:90vh; overflow-y:auto;">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px; border-bottom:1px solid var(--border-color); padding-bottom:10px;">
+        <div style="display:flex; align-items:center; gap:8px;">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--brand-green, #166534)" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+          <h3 style="font-size:1.1rem; font-weight:800; margin:0; color:var(--text-primary);">Edit Representative Purchase</h3>
+        </div>
+        <button class="icon-btn" type="button" onclick="closeEditRepOrderModal()">&times;</button>
+      </div>
+
+      <form id="edit-rep-order-form" onsubmit="saveEditedRepOrder(event)">
+        <input type="hidden" id="edit-rep-order-id">
+        <div class="form-group" style="margin-bottom:12px;">
+          <label class="form-label" for="edit-rep-order-firm" style="font-size:0.8rem; font-weight:700;">Firm / Vendor Name *</label>
+          <input type="text" id="edit-rep-order-firm" class="form-input" required>
+        </div>
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:12px;">
+          <div class="form-group" style="margin:0;">
+            <label class="form-label" for="edit-rep-order-contact" style="font-size:0.8rem; font-weight:700;">Contact Person</label>
+            <input type="text" id="edit-rep-order-contact" class="form-input">
+          </div>
+          <div class="form-group" style="margin:0;">
+            <label class="form-label" for="edit-rep-order-mobile" style="font-size:0.8rem; font-weight:700;">Mobile</label>
+            <input type="tel" id="edit-rep-order-mobile" class="form-input">
+          </div>
+        </div>
+        <div class="form-group" style="margin-bottom:12px;">
+          <label class="form-label" for="edit-rep-order-item" style="font-size:0.8rem; font-weight:700;">Product / Commodity Type *</label>
+          <input type="text" id="edit-rep-order-item" class="form-input" required>
+        </div>
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:12px;">
+          <div class="form-group" style="margin:0;">
+            <label class="form-label" for="edit-rep-order-qty" style="font-size:0.8rem; font-weight:700;">Quantity *</label>
+            <input type="number" id="edit-rep-order-qty" class="form-input" step="any" min="0" required oninput="calcEditRepOrderTotal()">
+          </div>
+          <div class="form-group" style="margin:0;">
+            <label class="form-label" for="edit-rep-order-rate" style="font-size:0.8rem; font-weight:700;">Rate (₹) *</label>
+            <input type="number" id="edit-rep-order-rate" class="form-input" step="any" min="0" required oninput="calcEditRepOrderTotal()">
+          </div>
+        </div>
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:12px;">
+          <div class="form-group" style="margin:0;">
+            <label class="form-label" for="edit-rep-order-total" style="font-size:0.8rem; font-weight:700;">Total Amount (₹) *</label>
+            <input type="number" id="edit-rep-order-total" class="form-input" step="any" min="0" required style="font-weight:800; color:var(--brand-green, #166534);">
+          </div>
+          <div class="form-group" style="margin:0;">
+            <label class="form-label" for="edit-rep-order-payment" style="font-size:0.8rem; font-weight:700;">Payment Mode</label>
+            <select id="edit-rep-order-payment" class="form-select">
+              <option value="cash">Cash</option>
+              <option value="upi">UPI</option>
+              <option value="bank_transfer">Bank Transfer</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group" style="margin-bottom:16px;">
+          <label class="form-label" for="edit-rep-order-status" style="font-size:0.8rem; font-weight:700;">Status</label>
+          <select id="edit-rep-order-status" class="form-select">
+            <option value="verified">Verified & Paid</option>
+            <option value="pending">Pending Approval</option>
+            <option value="pending_approval">Pending Approval</option>
+          </select>
+        </div>
+        <div style="display:flex; gap:10px; justify-content:flex-end;">
+          <button type="button" class="btn btn-secondary" onclick="closeEditRepOrderModal()">Cancel</button>
+          <button type="submit" class="btn btn-primary" id="btn-save-edit-rep-order" style="padding:10px 20px; font-weight:800;">Save Changes</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- GIVE / ADJUST CASH MODAL -->
+  <div id="issue-float-modal" class="sina-modal-backdrop">
+    <div class="sina-modal-card">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+        <h3 style="font-size: 1.15rem; font-weight: 700; color: var(--purple-primary);">Give Cash / Update Cash Given</h3>
+        <button class="icon-btn" id="btn-close-float-modal">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+      </div>
+      <form id="issue-float-form">
+        <div class="form-group">
+          <label class="form-label" for="float_date_input">Date *</label>
+          <input type="date" id="float_date_input" class="form-input" required>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="float_amount_input">Cash Given Amount (â‚¹) *</label>
+          <input type="number" id="float_amount_input" class="form-input" placeholder="e.g. 15000" min="0" step="any" required>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="float_notes_input">Notes / Route Purpose</label>
+          <input type="text" id="float_notes_input" class="form-input" placeholder="e.g. Morning cash for purchases">
+        </div>
+        <button type="submit" class="btn btn-primary btn-block" style="margin-top: 16px;">
+          Save & Give Cash
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- FULL PROOF / RECEIPT IMAGE VIEWER MODAL -->
+  <div id="proof-view-modal" class="sina-modal-backdrop" onclick="closeProofModal()">
+    <div class="sina-modal-card" style="padding: 14px; text-align: center;" onclick="event.stopPropagation()">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+        <span class="status-badge active" id="proof-modal-title">Document Inspection</span>
+        <button class="icon-btn" onclick="closeProofModal()">&times;</button>
+      </div>
+      <img id="proof-view-img" src="" style="width: 100%; max-height: 70vh; object-fit: contain; border-radius: var(--radius-md);" alt="Proof">
+      <div style="margin-top: 12px; display: flex; gap: 8px; justify-content: center;">
+        <button type="button" class="btn btn-outline-green btn-sm" onclick="downloadCurrentProofImg()" style="font-weight: 700; display: inline-flex; align-items: center; gap: 6px;">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          Download Document
+        </button>
+        <button type="button" class="btn btn-secondary btn-sm" onclick="closeProofModal()">Close</button>
+      </div>
+    </div>
+  </div>
+
+    <!-- Fixed Bottom Taskbar (5 Primary Tabs) -->
+  <nav id="admin-bottom-nav" class="admin-bottom-nav">
+    <a href="index.html" class="admin-nav-item" id="admin-nav-home">
+      <span class="nav-icon-wrap">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+      </span>
+      <span class="nav-text-label">Dashboard</span>
+    </a>
+    <a href="approvals.html" class="admin-nav-item" id="admin-nav-approvals">
+      <span class="nav-icon-wrap">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+        <span id="admin-approvals-badge" class="admin-nav-badge"></span>
+      </span>
+      <span class="nav-text-label">Approvals</span>
+    </a>
+    <a href="representatives.html" class="admin-nav-item" id="admin-nav-reps">
+      <span class="nav-icon-wrap">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+      </span>
+      <span class="nav-text-label">Reps</span>
+    </a>
+    <a href="firms.html" class="admin-nav-item" id="admin-nav-firms">
+      <span class="nav-icon-wrap">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+      </span>
+      <span class="nav-text-label">Firms</span>
+    </a>
+    <a href="history.html" class="admin-nav-item" id="admin-nav-history">
+      <span class="nav-icon-wrap">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+      </span>
+      <span class="nav-text-label">History</span>
+    </a>
+  </nav>
+
+  <!-- Admin Slide-Out Drawer Navigation (All 8 Modules) -->
+  <div id="sina-admin-drawer" class="sina-drawer">
+    <div class="drawer-backdrop" id="admin-drawer-backdrop"></div>
+    <div class="drawer-panel">
+      <div class="drawer-header admin-grad-header">
+        <div class="rep-avatar-box">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        </div>
+        <div class="rep-info">
+          <h4 class="rep-name" id="drawer-admin-name">Operations Admin</h4>
+          <span class="rep-phone" id="drawer-admin-email">admin@sina.com</span>
+          <span class="rep-route-pill">Super Admin</span>
+        </div>
+        <button class="icon-btn close-drawer-btn" id="close-admin-drawer-btn" type="button">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+      </div>
+
+      <nav class="drawer-nav">
+        <a href="index.html" class="drawer-link" id="drawer-link-home">
+          <span class="nav-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></span>
+          <span class="nav-label">Operations Dashboard</span>
+        </a>
+        <a href="representatives.html" class="drawer-link" id="drawer-link-reps">
+          <span class="nav-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></span>
+          <span class="nav-label">Representatives & Passwords</span>
+        </a>
+        <a href="history.html" class="drawer-link" id="drawer-link-history">
+          <span class="nav-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></span>
+          <span class="nav-label">Purchase History</span>
+        </a>
+            <a href="receipts.html" class="drawer-link" id="drawer-link-receipts">
+              <span class="nav-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg></span>
+              <span class="nav-label">Receipts & Vouchers</span>
+            </a>
+            <a href="bank-accounts.html" class="drawer-link" id="drawer-link-banks">
+              <span class="nav-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 2 7 22 7 12 2"/><rect x="4" y="10" width="2" height="9"/><rect x="9" y="10" width="2" height="9"/><rect x="14" y="10" width="2" height="9"/><rect x="19" y="10" width="2" height="9"/><line x1="2" y1="19" x2="22" y2="19"/></svg></span>
+              <span class="nav-label">Company Bank Accounts</span>
+            </a>
+            <a href="purchasing-firms.html" class="drawer-link" id="drawer-link-purchasing-firms">
+              <span class="nav-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg></span>
+              <span class="nav-label">Our Purchasing Firms</span>
+            </a>
+            <a href="sources.html" class="drawer-link" id="drawer-link-sources">
+              <span class="nav-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg></span>
+              <span class="nav-label">Procurement Sources</span>
+            </a>
+        <a href="catalog.html" class="drawer-link" id="drawer-link-catalog">
+          <span class="nav-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg></span>
+          <span class="nav-label">Commodities & Product Master</span>
+        </a>
+        <a href="firms.html" class="drawer-link" id="drawer-link-firms">
+          <span class="nav-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg></span>
+          <span class="nav-label">Firms Directory</span>
+        </a>
+        <a href="godowns.html" class="drawer-link" id="drawer-link-godowns">
+          <span class="nav-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg></span>
+          <span class="nav-label">Godowns & Warehouses</span>
+        </a>
+        <a href="approvals.html" class="drawer-link" id="drawer-link-approvals">
+          <span class="nav-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg></span>
+          <span class="nav-label">Payment Approvals</span>
+        </a>
+        <a href="analytics.html" class="drawer-link" id="drawer-link-analytics">
+          <span class="nav-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg></span>
+          <span class="nav-label">Operational Analytics</span>
+        </a>
+        <a href="locations.html" class="drawer-link" id="drawer-link-locations">
+          <span class="nav-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg></span>
+          <span class="nav-label">Field Rep GPS Tracking</span>
+        </a>
+      </nav>
+
+      <div class="drawer-footer">
+        <button type="button" class="btn btn-outline-green btn-block" style="margin-bottom: 8px;" onclick="window.openSettingsModal()">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+          App Policies & Settings
+        </button>
+        <button type="button" class="btn btn-outline-green btn-block" style="color: var(--danger-color); border-color: rgba(220,38,38,0.4); margin-bottom: 8px;" onclick="window.triggerSystemReset()">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg>
+          Reset All Data
+        </button>
+        <button type="button" class="btn btn-logout btn-block" onclick="window.sinaAdminAuth ? window.sinaAdminAuth.logout() : (window.location.href='login.html')">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+          Sign Out
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Settings & Permissions Modal -->
+  <div id="admin-settings-modal" class="sina-modal-backdrop">
+    <div class="sina-modal-card" style="max-width: 480px; padding: 20px;">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px;">
+        <div style="display: flex; align-items: center; gap: 8px;">
+          <img src="assets/logo.png" alt="SINA" style="width: 28px; height: 28px; object-fit: contain;">
+          <h3 style="font-size: 1.15rem; font-weight: 800; color: var(--green-dark); margin: 0;">App Policies & Permissions</h3>
+        </div>
+        <button type="button" class="icon-btn" onclick="window.closeSettingsModal()">&times;</button>
+      </div>
+      
+      <div style="background: var(--bg-secondary); border-radius: var(--radius-sm); padding: 14px; margin-bottom: 12px; border: 1px solid var(--border-color);">
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+          <div>
+            <strong style="font-size: 0.95rem; color: var(--text-primary);">Mandatory Expense Receipt Photo</strong>
+            <p class="text-muted" style="font-size: 0.78rem; margin: 4px 0 0 0;">Require field reps to upload a bill/receipt photo before an expense can be saved.</p>
+          </div>
+          <label style="position: relative; display: inline-block; width: 44px; height: 24px; margin-left: 12px;">
+            <input type="checkbox" id="setting-require-receipt-chk" style="opacity: 0; width: 0; height: 0;">
+            <span id="slider-require-receipt" style="position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #CBD5E1; transition: .3s; border-radius: 24px;"></span>
+          </label>
+        </div>
+      </div>
+
+      <div style="background: var(--bg-secondary); border-radius: var(--radius-sm); padding: 14px; margin-bottom: 16px; border: 1px solid var(--border-color);">
+        <strong style="font-size: 0.88rem; display: block; margin-bottom: 10px;">Android System Permissions</strong>
+        <div style="display: flex; flex-direction: column; gap: 8px; margin-bottom: 12px;">
+          <div style="display: flex; justify-content: space-between; align-items: center;">
+            <div>
+              <span style="font-size: 0.82rem; font-weight: 600; color: var(--text-primary); display: block;">High Priority Alerts</span>
+              <span style="font-size: 0.72rem; color: var(--text-muted);">Real-time purchase & payment sound/vibration</span>
+            </div>
+            <span class="badge" style="background: var(--green-tint); color: var(--green-dark); border: 1px solid var(--green-border); font-weight: 700;">Granted</span>
+          </div>
+          <div style="display: flex; justify-content: space-between; align-items: center;">
+            <div>
+              <span style="font-size: 0.82rem; font-weight: 600; color: var(--text-primary); display: block;">Location / GPS</span>
+              <span style="font-size: 0.72rem; color: var(--text-muted);">View field representative live coordinates</span>
+            </div>
+            <span class="badge" style="background: var(--green-tint); color: var(--green-dark); border: 1px solid var(--green-border); font-weight: 700;">Granted</span>
+          </div>
+          <div style="display: flex; justify-content: space-between; align-items: center;">
+            <div>
+              <span style="font-size: 0.82rem; font-weight: 600; color: var(--text-primary); display: block;">Camera & Storage</span>
+              <span style="font-size: 0.72rem; color: var(--text-muted);">Receipt & passbook review attachments</span>
+            </div>
+            <span class="badge" style="background: var(--green-tint); color: var(--green-dark); border: 1px solid var(--green-border); font-weight: 700;">Granted</span>
+          </div>
+        </div>
+        <button type="button" class="btn btn-outline-green btn-sm btn-block" onclick="if(window.FlutterBridge){window.FlutterBridge.postMessage(JSON.stringify({action:'OPEN_APP_SETTINGS'}))}else{alert('Available on Android')}" style="font-size: 0.8rem; font-weight: 700;">
+          Open Android App Settings
+        </button>
+      </div>
+
+      <div style="display: flex; justify-content: flex-end; gap: 8px;">
+        <button type="button" class="btn btn-secondary btn-sm" onclick="window.closeSettingsModal()">Cancel</button>
+        <button type="button" class="btn btn-primary btn-sm" onclick="window.saveSettings()">Save Configuration</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notification Container -->
+  <div id="admin-toast-container" class="admin-toast-container"></div>
+
+<!-- Scripts -->
+  <script src="js/config.js"></script>
+  <script src="js/icons.js"></script>
+  <script src="js/db.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/translate.js"></script>
+  <script src="js/nav.js"></script>
+  <script src="js/rep-detail.js"></script>
+</body>
+</html>
