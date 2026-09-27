@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Admin Login - SINA Admin Portal</title>
+  <meta name="theme-color" content="#1E513A">
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <meta http-equiv="Pragma" content="no-cache">
+  <meta http-equiv="Expires" content="0">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="SINA Admin">
+  <link rel="icon" type="image/x-icon" href="favicon.ico">
+  <link rel="icon" type="image/png" sizes="192x192" href="assets/icon-192.png">
+  <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
+  <link rel="manifest" href="manifest.json">
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/components.css">
+  <style>
+    body {
+      padding-top: 0;
+      padding-bottom: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      background: var(--bg-secondary);
+      margin: 0;
+    }
+    .login-container {
+      width: 100%;
+      max-width: 420px;
+      padding: 24px 16px;
+      box-sizing: border-box;
+    }
+    .login-card {
+      background: var(--bg-primary);
+      border-radius: var(--radius-lg);
+      padding: 32px 24px;
+      box-shadow: var(--shadow-md);
+      border: 1px solid var(--border-color);
+    }
+    .login-brand-header {
+      text-align: center;
+      margin-bottom: 24px;
+    }
+    .login-logo-box {
+      width: 72px;
+      height: 72px;
+      background: #FFFFFF;
+      padding: 4px;
+      border-radius: var(--radius-lg);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 12px;
+      box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12);
+      border: 1px solid var(--border-color);
+    }
+    .login-title {
+      font-size: 1.4rem;
+      font-weight: 800;
+      color: var(--text-primary);
+      margin: 0;
+    }
+    .login-subtitle {
+      font-size: 0.85rem;
+      color: var(--text-secondary);
+      margin-top: 4px;
+      margin-bottom: 0;
+    }
+    .error-alert {
+      display: none;
+      background: #FEF2F2;
+      border: 1px solid #FCA5A5;
+      color: #991B1B;
+      padding: 10px 14px;
+      border-radius: 8px;
+      font-size: 0.82rem;
+      font-weight: 600;
+      margin-bottom: 16px;
+      animation: fadeIn 0.2s ease;
+    }
+    .password-input-wrap {
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+    .password-input-wrap input {
+      padding-right: 44px;
+    }
+    .toggle-pass-btn {
+      position: absolute;
+      right: 8px;
+      background: none;
+      border: none;
+      color: #64748B;
+      cursor: pointer;
+      padding: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="login-container">
+    <div class="login-card">
+      <div class="login-brand-header">
+        <div class="login-logo-box">
+          <img src="assets/logo.png" alt="SINA" style="width: 100%; height: 100%; object-fit: contain; border-radius: 12px;">
+        </div>
+        <h1 class="login-title">Admin Portal Login</h1>
+        <p class="login-subtitle">Operations & Field Management Control</p>
+      </div>
+
+      <div id="login-error-msg" class="error-alert"></div>
+
+      <form id="admin-login-form">
+        <div class="form-group" style="margin-bottom: 14px;">
+          <label class="form-label" for="admin_email">Administrator Email / Phone</label>
+          <input type="text" id="admin_email" class="form-input" placeholder="e.g. admin@sina.com" required autofocus autocomplete="username">
+        </div>
+
+        <div class="form-group" style="margin-bottom: 20px;">
+          <label class="form-label" for="admin_password">Password</label>
+          <div class="password-input-wrap">
+            <input type="password" id="admin_password" class="form-input" placeholder="Enter administrator password" required autocomplete="current-password">
+            <button type="button" id="toggle-pass-btn" class="toggle-pass-btn" aria-label="Toggle password visibility">
+              <svg id="eye-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+            </button>
+          </div>
+        </div>
+
+        <button type="submit" id="btn-admin-submit" class="btn btn-primary btn-block" style="padding: 12px; font-weight: 800; font-size: 0.95rem;">
+          Sign In as Administrator
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <script src="js/config.js"></script>
+  <script src="js/icons.js"></script>
+  <script src="js/auth.js"></script>
+  <script>
+    // If already logged in, redirect directly to dashboard
+    if (window.sinaAdminAuth && window.sinaAdminAuth.getCurrentAdmin()) {
+      window.location.href = 'index.html';
+    }
+
+    // Toggle password visibility
+    const passInput = document.getElementById('admin_password');
+    const togglePassBtn = document.getElementById('toggle-pass-btn');
+    if (togglePassBtn && passInput) {
+      togglePassBtn.addEventListener('click', () => {
+        const isPass = passInput.type === 'password';
+        passInput.type = isPass ? 'text' : 'password';
+        togglePassBtn.innerHTML = isPass
+          ? '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>'
+          : '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>';
+      });
+    }
+
+    // Form submission
+    const form = document.getElementById('admin-login-form');
+    const errBox = document.getElementById('login-error-msg');
+    const btn = document.getElementById('btn-admin-submit');
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      errBox.style.display = 'none';
+      errBox.textContent = '';
+
+      const email = document.getElementById('admin_email').value.trim();
+      const pass = document.getElementById('admin_password').value.trim();
+
+      btn.disabled = true;
+      btn.textContent = 'Authenticating...';
+
+      try {
+        await window.sinaAdminAuth.login(email, pass);
+        window.location.href = 'index.html';
+      } catch (err) {
+        errBox.textContent = err.message || 'Invalid administrator credentials.';
+        errBox.style.display = 'block';
+        btn.disabled = false;
+        btn.textContent = 'Sign In as Administrator';
+        passInput.focus();
+      }
+    });
+  </script>
+</body>
+</html>

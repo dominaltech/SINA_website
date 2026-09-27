@@ -1,0 +1,243 @@
+/* SINA Admin - Design Tokens & Base CSS */
+/* Palette: Pure White, Deep Charcoal/Black Text, 20% Deep Dark Purple */
+
+:root {
+  --bg-primary: #FFFFFF;
+  --bg-secondary: #F8FAFC;
+  --bg-tertiary: #F1F5F9;
+  
+  --text-primary: #0F172A;
+  --text-secondary: #475569;
+  --text-muted: #94A3B8;
+  --text-inverse: #FFFFFF;
+
+  /* SINA Brand Palette: Forest Green primary & Warm Orange accents */
+  --brand-green: #1E513A;          /* Deep Forest Green (SINA logo) */
+  --brand-green-interactive: #2D6A4F; /* Interactive / hover forest green */
+  --brand-green-dark: #143D2B;     /* Deep header dark green */
+  --brand-green-tint: #F0FDF4;     /* Light green card background */
+  --brand-green-border: #BBF7D0;   /* Soft green borders */
+  --brand-green-shadow: rgba(30, 81, 58, 0.15);
+
+  --brand-orange: #EF9153;         /* Warm Orange (SINA logo leaf/grain) */
+  --brand-orange-interactive: #E87722;
+  --brand-orange-tint: #FFF7ED;
+  --brand-orange-border: #FED7AA;
+
+  /* Accent mapping: maps purple tokens to brand forest green */
+  --purple-primary: #1E513A;
+  --purple-dark: #143D2B;
+  --purple-light: #2D6A4F;
+  --purple-tint: #F0FDF4;
+  --purple-border: #BBF7D0;
+  --purple-shadow: rgba(30, 81, 58, 0.15);
+
+  --border-color: #E2E8F0;
+  --border-focus: #1E513A;
+
+  --success-color: #059669;
+  --success-bg: #ECFDF5;
+  --warning-color: #D97706;
+  --warning-bg: #FFFBEB;
+  --danger-color: #DC2626;
+  --danger-bg: #FEF2F2;
+
+  --font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 16px;
+  --radius-full: 9999px;
+
+  --shadow-sm: 0 1px 2px 0 rgba(15, 23, 42, 0.05);
+  --shadow-md: 0 4px 6px -1px rgba(15, 23, 42, 0.08);
+  --shadow-lg: 0 10px 15px -3px rgba(30, 81, 58, 0.1);
+
+  /* Brand green aliases */
+  --green-primary: #1E513A;
+  --green-dark: #143D2B;
+  --green-light: #2D6A4F;
+  --green-tint: #F0FDF4;
+  --green-border: #BBF7D0;
+  --green-shadow: rgba(30, 81, 58, 0.15);
+
+  --header-height: 58px;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body {
+  overflow-x: hidden;
+  max-width: 100vw;
+  width: 100%;
+}
+
+body {
+  font-family: var(--font-family);
+  background-color: var(--bg-secondary);
+  color: var(--text-primary);
+  line-height: 1.5;
+  padding-top: var(--header-height);
+  padding-bottom: 40px;
+  min-height: 100vh;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button, input, select, textarea {
+  font-family: inherit;
+  font-size: 1rem;
+}
+
+.admin-container {
+  width: 100%;
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 16px 14px;
+  box-sizing: border-box;
+}
+
+h1, h2, h3, h4, h5 {
+  color: var(--text-primary);
+  font-weight: 700;
+}
+
+.text-center { text-align: center; }
+.text-muted { color: var(--text-secondary); font-size: 0.875rem; }
+.text-purple { color: var(--purple-primary); }
+.font-bold { font-weight: 700; }
+
+
+/* =======================================================
+   ADMIN BOTTOM TASKBAR (BULLETPROOF MOBILE NAVIGATION)
+   ======================================================= */
+body {
+  padding-top: 58px !important;
+  padding-bottom: 78px !important;
+  box-sizing: border-box !important;
+}
+
+.admin-bottom-nav {
+  position: fixed !important;
+  bottom: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  height: 62px !important;
+  min-height: 62px !important;
+  background-color: #FFFFFF !important;
+  border-top: 1px solid var(--border-color, #E2E8F0) !important;
+  display: flex !important;
+  flex-direction: row !important;
+  align-items: center !important;
+  justify-content: space-around !important;
+  z-index: 99999 !important;
+  box-shadow: 0 -2px 10px rgba(15, 23, 42, 0.08) !important;
+  padding: 0 2px !important;
+  box-sizing: border-box !important;
+}
+
+.admin-bottom-nav a.admin-nav-item {
+  flex: 1 1 0% !important;
+  min-width: 0 !important;
+  height: 100% !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 2px !important;
+  text-decoration: none !important;
+  color: #64748B !important;
+  position: relative !important;
+  padding: 4px 1px !important;
+  box-sizing: border-box !important;
+  transition: color 0.15s ease !important;
+  -webkit-tap-highlight-color: transparent !important;
+  user-select: none !important;
+}
+
+.admin-bottom-nav a.admin-nav-item .nav-icon-wrap {
+  position: relative !important;
+  width: 22px !important;
+  height: 22px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  flex-shrink: 0 !important;
+}
+
+.admin-bottom-nav a.admin-nav-item .nav-icon-wrap svg,
+.admin-bottom-nav a.admin-nav-item svg {
+  width: 20px !important;
+  height: 20px !important;
+  min-width: 20px !important;
+  min-height: 20px !important;
+  display: block !important;
+  stroke: #64748B !important;
+  fill: none !important;
+  stroke-width: 2 !important;
+  flex-shrink: 0 !important;
+}
+
+.admin-bottom-nav a.admin-nav-item .nav-text-label {
+  display: block !important;
+  font-size: 11px !important;
+  font-weight: 700 !important;
+  line-height: 1.1 !important;
+  color: #64748B !important;
+  text-align: center !important;
+  white-space: nowrap !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+}
+
+.admin-bottom-nav a.admin-nav-item:hover,
+.admin-bottom-nav a.admin-nav-item.active {
+  color: var(--purple-primary, #1E513A) !important;
+}
+
+.admin-bottom-nav a.admin-nav-item.active .nav-icon-wrap svg,
+.admin-bottom-nav a.admin-nav-item.active svg {
+  stroke: var(--purple-primary, #1E513A) !important;
+  transform: scale(1.06) !important;
+}
+
+.admin-bottom-nav a.admin-nav-item.active .nav-text-label {
+  color: var(--purple-primary, #1E513A) !important;
+  font-weight: 800 !important;
+}
+
+.admin-bottom-nav a.admin-nav-item::before {
+  content: '' !important;
+  position: absolute !important;
+  top: 0 !important;
+  left: 20% !important;
+  right: 20% !important;
+  height: 3px !important;
+  background: transparent !important;
+  border-radius: 0 0 3px 3px !important;
+  transition: background-color 0.15s ease !important;
+}
+
+.admin-bottom-nav a.admin-nav-item.active::before {
+  background: var(--purple-primary, #1E513A) !important;
+}
+
+.admin-nav-badge {
+  display: none;
+  position: absolute !important;
+  top: -2px !important;
+  right: -3px !important;
+  width: 9px !important;
+  height: 9px !important;
+  background: #E65100 !important;
+  border-radius: 50% !important;
+  border: 1.5px solid #FFFFFF !important;
+  box-shadow: 0 1px 3px rgba(230, 81, 0, 0.4) !important;
+  z-index: 10 !important;
+}

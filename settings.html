@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Admin Settings & Permissions - SINA Admin</title>
+  <meta name="theme-color" content="#1E513A">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="SINA Admin">
+  <link rel="icon" type="image/x-icon" href="favicon.ico">
+  <link rel="icon" type="image/png" sizes="192x192" href="assets/icon-192.png">
+  <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
+  <link rel="manifest" href="manifest.json">
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/admin.css">
+  <style>
+    .perm-card {
+      background: #FFFFFF;
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      padding: 16px;
+      margin-bottom: 16px;
+    }
+    .perm-card-title {
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: var(--green-primary);
+      margin-bottom: 14px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .perm-item {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 12px 0;
+      border-bottom: 1px solid var(--border-color);
+    }
+    .perm-item:last-child {
+      border-bottom: none;
+      padding-bottom: 0;
+    }
+    .perm-item-left {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      flex: 1;
+    }
+    .perm-icon {
+      width: 36px;
+      height: 36px;
+      border-radius: 8px;
+      background: var(--purple-tint);
+      color: var(--purple-primary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+    .perm-info h4 {
+      font-size: 0.9rem;
+      font-weight: 700;
+      color: var(--text-primary);
+      margin: 0 0 2px 0;
+    }
+    .perm-info p {
+      font-size: 0.75rem;
+      color: var(--text-secondary);
+      margin: 0;
+      line-height: 1.35;
+    }
+    .perm-item-right {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 6px;
+      flex-shrink: 0;
+    }
+    .status-pill {
+      font-size: 0.7rem;
+      font-weight: 700;
+      padding: 3px 8px;
+      border-radius: var(--radius-full);
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .status-pill.granted {
+      background: #DCFCE7;
+      color: #15803D;
+      border: 1px solid #86EFAC;
+    }
+    .status-pill.prompt {
+      background: #FEF3C7;
+      color: #B45309;
+      border: 1px solid #FCD34D;
+    }
+    /* Proper Toggle Switch with sliding knob */
+    .switch {
+      position: relative;
+      display: inline-block;
+      width: 48px;
+      height: 26px;
+      flex-shrink: 0;
+    }
+    .switch input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+    .slider {
+      position: absolute;
+      cursor: pointer;
+      inset: 0;
+      background-color: #CBD5E1;
+      border-radius: 26px;
+      transition: all 0.25s ease;
+    }
+    .slider:before {
+      position: absolute;
+      content: "";
+      height: 20px;
+      width: 20px;
+      left: 3px;
+      bottom: 3px;
+      background-color: #FFFFFF;
+      border-radius: 50%;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.25);
+      transition: all 0.25s ease;
+    }
+    input:checked + .slider {
+      background-color: var(--brand-green, #1E513A);
+    }
+    input:checked + .slider:before {
+      transform: translateX(22px);
+    }
+  </style>
+</head>
+<body>
+  <!-- Top Persistent Header Taskbar -->
+  <header id="sina-admin-header" class="admin-top-bar">
+    <div class="top-bar-left">
+      <a href="index.html" class="icon-btn" aria-label="Go back" style="display: flex; align-items: center; justify-content: center; text-decoration: none;">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"></polyline></svg>
+      </a>
+      <div class="admin-branding" style="display: flex; align-items: center; gap: 8px;">
+        <img src="assets/logo.png" alt="SINA" style="width: 32px; height: 32px; object-fit: contain; border-radius: 6px; border: 1px solid var(--green-border);">
+        <span class="brand-name" style="color: var(--green-dark); font-weight: 900;">SINA</span>
+        <span class="admin-tag" style="background: var(--green-primary); color: #FFFFFF; font-weight: 700; font-size: 0.65rem; padding: 2px 6px; border-radius: 4px;">ADMIN</span>
+      </div>
+    </div>
+    <div class="top-bar-right">
+      <button id="admin-notif-btn" class="icon-btn notif-bell-btn" title="Live Alerts" type="button">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+        <span id="admin-header-notif-badge" class="notif-counter" style="display: none;">0</span>
+      </button>
+      <button id="admin-refresh-btn" class="icon-btn refresh-btn" title="Instant Refresh Data" aria-label="Refresh" type="button">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg>
+      </button>
+    </div>
+  </header>
+
+  <main class="admin-container">
+    <div class="page-header-row" style="margin-bottom: 16px;">
+      <div>
+        <h1 class="page-title">Admin Settings & Policies</h1>
+        <p class="page-subtitle">Configure Android device permissions, operational controls, and administrative policies.</p>
+      </div>
+    </div>
+
+    <!-- 1. ANDROID PERMISSIONS CARD -->
+    <div class="perm-card">
+      <div class="perm-card-title">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        <span>Android Device Permissions</span>
+      </div>
+
+      <!-- Notification Permission -->
+      <div class="perm-item">
+        <div class="perm-item-left">
+          <div class="perm-icon" style="background: var(--purple-tint); color: var(--purple-primary);">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+          </div>
+          <div class="perm-info">
+            <h4>Push Notifications (Live Alerts)</h4>
+            <p>Immediate alerts on phone whenever reps submit new purchase entries or UPI approvals.</p>
+          </div>
+        </div>
+        <div class="perm-item-right">
+          <label class="switch">
+            <input type="checkbox" id="admin-toggle-notif">
+            <span class="slider"></span>
+          </label>
+        </div>
+      </div>
+
+      <!-- Location Permission -->
+      <div class="perm-item">
+        <div class="perm-item-left">
+          <div class="perm-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+          </div>
+          <div class="perm-info">
+            <h4>Location Access (GPS)</h4>
+            <p>Required for viewing rep locations on real-time map and route tracking.</p>
+          </div>
+        </div>
+        <div class="perm-item-right">
+          <label class="switch">
+            <input type="checkbox" id="admin-toggle-location">
+            <span class="slider"></span>
+          </label>
+        </div>
+      </div>
+
+      <!-- Camera Permission -->
+      <div class="perm-item">
+        <div class="perm-item-left">
+          <div class="perm-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
+          </div>
+          <div class="perm-info">
+            <h4>Camera & Storage</h4>
+            <p>Review passbooks, cheques, and proof receipts uploaded by field reps.</p>
+          </div>
+        </div>
+        <div class="perm-item-right">
+          <label class="switch">
+            <input type="checkbox" id="admin-toggle-camera" checked>
+            <span class="slider"></span>
+          </label>
+        </div>
+      </div>
+
+      <!-- Phone Gallery & Downloads Permission -->
+      <div class="perm-item">
+        <div class="perm-item-left">
+          <div class="perm-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          </div>
+          <div class="perm-info">
+            <h4>Phone Gallery & Downloads</h4>
+            <p>Save passbook proofs directly to phone Gallery (Pictures/SINA) and voucher PDFs to Downloads.</p>
+          </div>
+        </div>
+        <div class="perm-item-right">
+          <label class="switch">
+            <input type="checkbox" id="admin-toggle-storage" checked>
+            <span class="slider"></span>
+          </label>
+        </div>
+      </div>
+
+      <div style="margin-top: 16px; padding-top: 12px; border-top: 1px solid var(--border-color);">
+        <button type="button" class="btn btn-secondary btn-block btn-sm" id="admin-btn-open-os-settings" style="display: flex; align-items: center; justify-content: center; gap: 8px;">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+          Open Official Android App Settings
+        </button>
+      </div>
+    </div>
+
+    <!-- PWA APPLICATION INSTALL CARD -->
+    <div class="perm-card" id="pwa-install-card">
+      <div class="perm-card-title">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+          <polyline points="7 10 12 15 17 10"></polyline>
+          <line x1="12" y1="15" x2="12" y2="3"></line>
+        </svg>
+        <span>Install SINA Admin App (PWA)</span>
+      </div>
+
+      <div class="perm-item" style="border-bottom: none; padding-bottom: 0;">
+        <div class="perm-item-left">
+          <div class="perm-icon" style="background: rgba(30, 81, 58, 0.1); color: var(--green-primary); padding: 4px;">
+            <img src="assets/icon-192.png" alt="SINA" style="width: 28px; height: 28px; object-fit: contain; border-radius: 6px;">
+          </div>
+          <div class="perm-info">
+            <h4 id="pwa-install-title">Install Progressive Web App</h4>
+            <p id="pwa-install-desc">Install SINA Admin on your Desktop, Windows, Mac, or Android device for standalone launch and fast offline-capable access.</p>
+          </div>
+        </div>
+        <div class="perm-item-right" id="pwa-install-actions">
+          <button type="button" class="btn btn-sm btn-primary" id="btn-install-pwa" style="padding: 7px 16px; font-size: 0.85rem; font-weight: 700; white-space: nowrap; display: inline-flex; align-items: center; gap: 6px; background: var(--green-primary); color: #FFFFFF; border: none; border-radius: var(--radius-sm); cursor: pointer;">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            <span id="btn-install-pwa-text">Install App</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- iOS specific instructions banner -->
+      <div id="pwa-ios-instructions" style="display: none; margin-top: 14px; padding: 12px; border-radius: 8px; background: #F8FAFC; border: 1px dashed var(--border-color); font-size: 0.8rem; color: var(--text-secondary); line-height: 1.45;">
+        <div style="font-weight: 700; color: var(--text-primary); margin-bottom: 6px; display: flex; align-items: center; gap: 6px;">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg>
+          Apple iOS Installation:
+        </div>
+        Apple iOS requires adding to Home Screen manually through Safari:
+        <ol style="margin: 6px 0 0 18px; padding: 0;">
+          <li>Tap the <strong>Share</strong> button <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align: middle;"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/><polyline points="16 6 12 2 8 6"/><line x1="12" y1="2" x2="12" y2="15"/></svg> at the bottom of Safari.</li>
+          <li>Scroll down and select <strong>"Add to Home Screen"</strong>.</li>
+          <li>Tap <strong>"Add"</strong> in the top-right corner to finish.</li>
+        </ol>
+      </div>
+
+      <!-- Desktop / Android hint text -->
+      <div id="pwa-install-hint" style="display: none; margin-top: 10px; font-size: 0.75rem; color: var(--text-muted); line-height: 1.35;"></div>
+    </div>
+
+    <!-- 2. OPERATIONS & POLICY CONTROLS -->
+    <div class="perm-card">
+      <div class="perm-card-title">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+        <span>Operations Policies</span>
+      </div>
+
+      <div style="display: flex; align-items: center; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid var(--border-color);">
+        <div>
+          <div style="font-weight: 700; font-size: 0.9rem; color: var(--text-primary);">Mandatory Expense Receipts</div>
+          <div style="font-size: 0.75rem; color: var(--text-secondary);">Reps must upload photo receipts when submitting field expenses</div>
+        </div>
+        <label class="switch">
+          <input type="checkbox" id="policy-expense-receipt">
+          <span class="slider" id="policy-slider"></span>
+        </label>
+      </div>
+    </div>
+
+    <!-- 3. DATA & SYSTEM MANAGEMENT -->
+    <div class="perm-card">
+      <div class="perm-card-title">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg>
+        <span>System Maintenance</span>
+      </div>
+      <button type="button" class="btn btn-outline-purple btn-block" style="color: var(--danger-color); border-color: rgba(220,38,38,0.4); margin-bottom: 10px;" onclick="window.triggerSystemReset()">
+        Reset System Cache & Offline Data
+      </button>
+      <button type="button" class="btn btn-danger btn-block" onclick="window.sinaAdminAuth ? window.sinaAdminAuth.logout() : (window.location.href='login.html')">
+        Sign Out of Admin Portal
+      </button>
+    </div>
+  </main>
+
+  <!-- Fixed Bottom Taskbar (5 Primary Tabs) -->
+  <nav id="admin-bottom-nav" class="admin-bottom-nav">
+    <a href="index.html" class="admin-nav-item" id="admin-nav-home">
+      <span class="nav-icon-wrap">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+      </span>
+      <span class="nav-text-label">Dashboard</span>
+    </a>
+    <a href="approvals.html" class="admin-nav-item" id="admin-nav-approvals">
+      <span class="nav-icon-wrap">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+        <span id="admin-approvals-badge" class="admin-nav-badge"></span>
+      </span>
+      <span class="nav-text-label">Approvals</span>
+    </a>
+    <a href="representatives.html" class="admin-nav-item" id="admin-nav-reps">
+      <span class="nav-icon-wrap">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+      </span>
+      <span class="nav-text-label">Reps</span>
+    </a>
+    <a href="firms.html" class="admin-nav-item" id="admin-nav-firms">
+      <span class="nav-icon-wrap">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+      </span>
+      <span class="nav-text-label">Firms</span>
+    </a>
+    <a href="history.html" class="admin-nav-item" id="admin-nav-history">
+      <span class="nav-icon-wrap">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+      </span>
+      <span class="nav-text-label">History</span>
+    </a>
+  </nav>
+
+  <!-- Scripts -->
+  <script src="js/config.js"></script>
+  <script src="js/icons.js"></script>
+  <script src="js/db.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/translate.js"></script>
+  <script src="js/nav.js"></script>
+  <script src="js/settings.js"></script>
+</body>
+</html>
